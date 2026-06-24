@@ -67,21 +67,26 @@ public class BingoTasPlayerModule : EverestModule {
     {
         List<BingoClient.BingoClient.SquareMsg> boardlist = BingoClient.BingoClient.Instance.GetBoard();
         string[] board = new string[boardlist.Count];
+        if (recentBoard == null) recentBoard = new string[boardlist.Count];
         for (int i = 0; i < boardlist.Count; i++)
         {
             board[i] = boardlist[i].name;
+            recentBoard[i] = boardlist[i].colors;
         }
-        recentBoard = board;
         return board;
         //evallua return invokeMethod("Celeste.Mod.BingoTasPlayer.BingoTasPlayerModule","GetBoard")
     }
 
     public static bool HasBoardChanged()
     {
-        if (recentBoard == null) return false;
-        string[] oldboard = new string[recentBoard.Length];
-        recentBoard.CopyTo(oldboard, 0);
-        return !Enumerable.SequenceEqual(oldboard, GetBoard());
+        if (recentBoard == null) return true;
+        var board = BingoClient.BingoClient.Instance.GetBoard();
+        string[] colors = new string[board.Count];
+        for (int i = 0; i < board.Count; i++)
+        {
+            colors[i] = board[i].colors;
+        }
+        return !Enumerable.SequenceEqual(recentBoard, colors);
         //evallua return invokeMethod("Celeste.Mod.BingoTasPlayer.BingoTasPlayerModule","HasBoardChanged")
     }
 
