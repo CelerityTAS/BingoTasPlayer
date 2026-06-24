@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using TAS;
 using TAS.Input;
 using Celeste.Mod.BingoClient;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Celeste.Mod.BingoTasPlayer;
 
@@ -28,7 +30,7 @@ public class BingoTasPlayerModule : EverestModule {
         Logger.SetLogLevel(nameof(BingoTasPlayerModule), LogLevel.Info);
 #endif
     }
-
+    private static string[] recentBoard;
     public override void Load() {
         On.Celeste.Celeste.Update += On_Celeste_Update;
         // TODO: apply any hooks that should always be active
@@ -41,7 +43,7 @@ public class BingoTasPlayerModule : EverestModule {
     }
 
     private static int b;
-    
+
     public static void RunTas(string filename)
     {
         Manager.DisableRun();
@@ -51,19 +53,38 @@ public class BingoTasPlayerModule : EverestModule {
 
     public static bool TryTick(int slot)
     {
+        if (BingoClient.BingoClient.Instance.GetObjectiveStatus(slot) == ObjectiveStatus.Claimed)
+        {
+            return false;
+        }
+        BingoClient.BingoClient.Instance.SendClaim(slot);
+        //BingoClient.BingoClient.Instance.SendClear(slot); we will not clear
         return true;
+        //evallua return invokeMethod("Celeste.Mod.BingoTasPlayer.BingoTasPlayerModule","TryTick",2)
     }
 
     public static string[] GetBoard()
     {
-        return null;
+        List<BingoClient.BingoClient.SquareMsg> boardlist = BingoClient.BingoClient.Instance.GetBoard();
+        string[] board = new string[boardlist.Count];
+        for (int i = 0; i < boardlist.Count; i++)
+        {
+            board[i] = boardlist[i].name;
+        }
+        recentBoard = board;
+        return board;
+        //evallua return invokeMethod("Celeste.Mod.BingoTasPlayer.BingoTasPlayerModule","GetBoard")
     }
 
     public static bool HasBoardChanged()
     {
-        return false;
+        if (recentBoard == null) return false;
+        string[] oldboard = new string[recentBoard.Length];
+        recentBoard.CopyTo(oldboard, 0);
+        return !Enumerable.SequenceEqual(oldboard, GetBoard());
+        //evallua return invokeMethod("Celeste.Mod.BingoTasPlayer.BingoTasPlayerModule","HasBoardChanged")
     }
-    
+
     private static void On_Celeste_Update(On.Celeste.Celeste.orig_Update orig, Celeste self, GameTime gameTime)
     {
         if (Settings.TestBind.Pressed)
@@ -80,7 +101,7 @@ public class BingoTasPlayerModule : EverestModule {
                 b = 0;
             }
         }
-        
+
         orig(self, gameTime); 
     }
 }
