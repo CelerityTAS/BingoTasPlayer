@@ -1,5 +1,5 @@
 namespace Celeste.Mod.BingoTasPlayer;
 
 public class BingoTasPlayerModuleSettings : EverestModuleSettings {
-    public ButtonBinding TestBind { get; set; }
+    public ButtonBinding StartBind { get; set; }
 }

@@ -128,7 +128,7 @@ public class BingoTasPlayerModule : EverestModule {
     private static SortedDictionary<int, bool> results = new();
 
     private static void On_Celeste_Update(On.Celeste.Celeste.orig_Update orig, Celeste self, GameTime gameTime) {
-        if (Settings.TestBind.Pressed) {
+        if (Settings.StartBind.Pressed) {
             if (!BingoClient.BingoClient.Instance.Connected) orig(self, gameTime);
             string[] objnamearr = GetBoard();
             Objective[] objarr = new Objective[objnamearr.Length];
