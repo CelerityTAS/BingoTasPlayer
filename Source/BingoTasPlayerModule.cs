@@ -115,12 +115,11 @@ public class BingoTasPlayerModule : EverestModule {
 
     public static bool HasBoardChanged() {
         if (recentBoard == null) return true;
-        var board = BingoClient.BingoClient.Instance.GetBoard();
-        string[] colors = new string[board.Count];
-        for (int i = 0; i < board.Count; i++) {
-            colors[i] = board[i].colors;
+        for (int i = 0; i < 25; i++) {
+            // if our recentboard and the board bingoclient have differ in claimed objectives
+            if ((BingoClient.BingoClient.Instance.GetObjectiveStatus(i) == ObjectiveStatus.Claimed && recentBoard[i] == "blank") || (BingoClient.BingoClient.Instance.GetObjectiveStatus(i) != ObjectiveStatus.Claimed && (recentBoard[i] != "blank" && recentBoard[i] != "" && recentBoard[i] != null))) return true;
         }
-        return !Enumerable.SequenceEqual(recentBoard, colors);
+        return false;
         //evallua return invokeMethod("Celeste.Mod.BingoTasPlayer.BingoTasPlayerModule","HasBoardChanged")
     }
     private static int lastTASOffset = 0;
