@@ -10,29 +10,126 @@ using TAS.Input;
 namespace Celeste.Mod.BingoTasPlayer {
     internal class TASRouter : IBingoRouter {
         public TASRouter() {
-            //TASFileInfo start = new TASFileInfo("../GMBingoPlayer/start.tas", "start", "", "");
+            /*
+             * These files are good to use as shortcuts for menuing
+             * */
+            /*
+             * These enter files go from the chapter select screen to gameplay inside the checkpoints.
+             * - enter just enters the A-Side for the first time (so no checkpoints or B-Sides have been unlocked yet)
+             * - entercp1 enters the first checkpoint of a level (N means no Postcard, so the A-Side has already been beaten before, P for Postcard, if you have not completed the A-Side yet)
+             * - entercp2 etc. just enter the secondm, third and so on checkpoint.
+             * - entersummit enters summit for the first time
+             * - entersummitcp1 enters 0m (so the level has been played before)
+             * - enterfarewell enters farewell for the first time                                   (importantly, this gets DTS)
+             * - enterfarewellCP1 enters start of farewell if the chapter has already been played   (importantly, this gets DTS)
+             * - entercore
+             * - entercorecp1
+             * - enterB enters the B-side if it has not yet been played
+             * - enterBcp1 enters the first checkpoint of the B-Side (you cannot enter other checkpoints, gotta commit to B-Sides)
+             * */
             TASFileInfo enter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterWithPostcard.tas", "EnterWithPostcard", "", "");
-            TASFileInfo entercp2 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP2.tas", "EnterCP2", "", "");
-            TASFileInfo entercp3 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP3.tas", "EnterCP3", "", "");
             TASFileInfo entercp1N = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP1NoPostCard.tas", "EnterCP1N", "", "");
             TASFileInfo entercp1P = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP1WithPostCard.tas", "EnterCP1P", "", "");
+            TASFileInfo entercp2 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP2.tas", "EnterCP2", "", "");
+            TASFileInfo entercp3 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP3.tas", "EnterCP3", "", "");
+            TASFileInfo entercp4 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP4.tas", "EnterCP4", "", "");
+            TASFileInfo entercp5 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP5.tas", "EnterCP5", "", "");
+            TASFileInfo entercp6 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCP6.tas", "EnterCP6", "", "");
             TASFileInfo entersummit = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterSummit.tas", "EnterSummit", "", "");
+            TASFileInfo entersummitcp1 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterSummitCP1.tas", "EnterSummitCP1", "", "");
             TASFileInfo enterfarewell = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterFarewell.tas", "EnterFarewell", "", "");
+            TASFileInfo enterfarewellcp1 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterFarewellCP1.tas", "EnterFarewellCP1", "", "");
             TASFileInfo entercore = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCore.tas", "EnterCore", "", "");
+            TASFileInfo entercorecp1 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCoreCP1.tas", "EnterCoreCP1", "", "");
+            TASFileInfo enterB = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterBSide.tas", "EnterBSide", "", "");
+            TASFileInfo enterBcp1 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterBSideCP1.tas", "EnterBSideCP1", "", "");
+
+            /*
+             * load a from b is played after a B-side is completed and enters the next A-side automatically. There is currently no leaveB, but it has also not yet been needed.
+             * If you really wnat a leaveB, it would probably be rtmmenu, although you would need to test that.
+             * */
+            TASFileInfo loadafromb = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "CelesteTAS/LoadAFromB.tas", "LoadAFromB", "SkipExit", "");
+
+            /*
+             * These files leave a chapter and place the game on the Chapter Select screen
+             * - leave is used when a chapter was completed for the first time. (There might be bugs, if no deaths occur and no collectibles are gotten. But surely this will never happen in Bingo :D)
+             *   importantly it places the game on the next chapter, not the one that was just completed.
+             * - leaveagain is used when finishing a chapter, that was already completed before, it will place the game on the chapter that was just completed, not the next.
+             * - leavepico leaves pico and places the game in the pico 8 room, you will need to play rtm after this to get to chapter-select.
+             * - rtm returns to map after a frame of gameplay (this is important for unlocking checkpoints)
+             * - rtmwakeup returns to map after a wakeup animation, like 2A (does not unlock awake), 5A and 5B
+             * - rtmCassette returns to map after the proper time has passed to collect a cassette.
+             * - rtmmenu is used when the file already has an RTM build in, like all fromX files and 8A-heart files (as well as all B-sides, but we have loadafromb)
+             * */
             TASFileInfo leave = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "LeaveChapter.tas", "LeaveChapter", "", "");
             TASFileInfo leaveagain = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "LeaveAgain.tas", "LeaveAgain", "", "");
             TASFileInfo leavepico = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "LeavePico.tas", "LeavePico", "0", "Exit");
-            TASFileInfo Left = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "Left.tas", "Left", "", "");
-            TASFileInfo Right = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "Right.tas", "Right", "", "");
-            TASFileInfo enterB = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterBSide.tas", "EnterBSide", "", "");
-            TASFileInfo loadafromb = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "CelesteTAS/LoadAFromB.tas", "LoadAFromB", "SkipExit", "");
-            TASFileInfo restartchapter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RestartChapter.tas", "RestartChapter", "", "");
             TASFileInfo rtm = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "WalkinCheckpoint", "");
+            TASFileInfo rtmwakeup = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Wakeup", "");
             TASFileInfo rtmCassette = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Cassette", "");
             TASFileInfo rtmmenu = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Menu", "");
+
+            /*
+             * These are for navigating the Chapter select Screen
+             * - Left and Right go left a chapter and right a chapter
+             * - skipchapter skips the current chapter, so if the game is on 4A, 5A will be unlocked using the assist skip. It will then end on that chapter, not entering it.
+             *   Use one of the enter-files for that
+             */
+            TASFileInfo Left = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "Left.tas", "Left", "", "");
+            TASFileInfo Right = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "Right.tas", "Right", "", "");
             TASFileInfo skipchapter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "SkipChapter.tas", "SkipChapter", "", "");
 
+            /*
+             * restarts the chapter. beware to do this before the game rtms, 
+             * new (new TASObjectiveInfo("2A-fromstart-heart","Start","Heart"),null), // tick 13
+               new (restartchapter,null)
+             * is the correct way to restart after getting 2A-blue, not "new (new TASObjectiveInfo("2A-fromstart-heart"),null)"
+             * */
+            TASFileInfo restartchapter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RestartChapter.tas", "RestartChapter", "", "");
+
+
+            /*
+             * The elements of the list contain two things, info about the file and info about what to tick.
+             * First the file:
+             * 
+             * The easiest way to add objectives is using 
+             * new TASObjectiveInfo({name of file in objective repository})
+             * or 
+             * new TASObjectiveInfo({name of file in objective repository}, {startlabel}, {endlabel})
+             * 
+             * startlabel is usually:
+             * Start, when entering from the previous checkpoint, which is default in TASObjectiveInfo's constructor
+             * RTM, when entering not the first checkpoint from the chapter select screen (needs to be added to the constructor (don't forget, lol))
+             * DTS for all farewell files that have begun at the start checkpoint (and therefor got DTS)
+             * FromGrabless is used in 2A-awake files when intervention was played grabless, since otherwise the objective is not valid.
+             * 
+             * endlabels: always play till the last thing you want to get in a checkpoint. you might have to check what that is.
+             * Heart, you can RTM immediately
+             * Cassette, you can rtmcassette
+             * Winged, Seeded you can RTM immediately if you want nothing more
+             * some files have ARB or Collect labels, but some might be buggy.
+             * 
+             * ------
+             * Farewell powersource and remembered are currently kinda bugged with ending labels.
+             * I will need to fix them in the future. just let them play till the end of ps or remembered.
+             * ---------
+             * 
+             * 0mARBCollect, 5000mARBCollect, etc. are labels in 7A files that are used to collect the last berry of a previous checkpoint (usually as end-labels)
+             * 
+             * 4A cliffface also sometimes has the skipfirst as an option which allows skipping the first berry.
+             * 
+             * The second thing is info about ticks.
+             * This is an array of so called tickattempts, which have a constructor that needs:
+             * - the time in frames the objective is in the file
+             * - info about the objective, which needs the name of the objective (irrelevant) and the index of the objective (0-indexed)
+             * */
             route = [
+                new (enter,null),
+                new(new TASObjectiveInfo("1A-start"),new TickAttempt[] {new TickAttempt(0,new Objective("wg",0))}),
+                ];
+
+            #region T6
+            RouteChange[] routesix = [
                 new (enter,null),
                 new(new TASObjectiveInfo("1A-wingedgolden"),null),
                 new (leave,new TickAttempt[] {new TickAttempt(0,new Objective("wg",6))}),
@@ -90,7 +187,7 @@ namespace Celeste.Mod.BingoTasPlayer {
                 new (new TASObjectiveInfo("8A-start-intothecore-switch","Start","Collect"),null),
                 new (rtm,new TickAttempt[] {new TickAttempt(0, new Objective("switch", 11))})
             ];
-
+            #endregion T6
             #region T5
             RouteChange[] routefive = [
                 new (enter,null),
@@ -290,11 +387,6 @@ namespace Celeste.Mod.BingoTasPlayer {
             if (route.Count == 0) return null;
             previous = route[0];
             route.RemoveAt(0);
-
-            TickAttempt[] arr = new TickAttempt[2];
-            arr[0] = new TickAttempt(600, new Objective("name", 2));
-            arr[1] = new TickAttempt(300, new Objective("name2", 4));
-            if (route.Count == 0) return new RouteChange(previous.FilePath, arr);
             return previous;
         }
 
