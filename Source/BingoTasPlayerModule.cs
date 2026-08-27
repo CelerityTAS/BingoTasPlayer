@@ -1,5 +1,17 @@
-﻿using System;
+﻿using Celeste.Mod.BingoClient;
+using IL.Monocle;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel.Design;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using System.Xml.Linq;
 using TAS;
 using TAS.Input;
 using Celeste.Mod.BingoClient;
@@ -12,6 +24,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
+using Monocle;
 
 namespace Celeste.Mod.BingoTasPlayer;
 
@@ -43,11 +56,13 @@ public class BingoTasPlayerModule : EverestModule {
             Directory.CreateDirectory(Everest.PathEverest + "\\TmpBingoAIFiles\\");
         }
         On.Celeste.Celeste.Update += On_Celeste_Update;
+        On.Monocle.Engine.RenderCore += this.Render;
         // TODO: apply any hooks that should always be active
     }
 
     public override void Unload() {
         On.Celeste.Celeste.Update -= On_Celeste_Update;
+        On.Monocle.Engine.RenderCore -= this.Render;
         // TODO: unapply any hooks applied in Load()
     }
 
@@ -60,7 +75,7 @@ public class BingoTasPlayerModule : EverestModule {
     private static IBingoRouter router = new TASRouter();
     private static RouteChange route;
     public static void StartTas() {
-        route = new RouteChange(new(GMBingoPlayerRepoRelativePath + "start.tas"), null);
+        route = new RouteChange(new(GMBingoPlayerRepoRelativePath + "start.tas", "start", "0"), null);
         NextTas(route);
         Manager.DisableRun();
         Manager.Controller.FilePath = TASFilePath;
@@ -71,7 +86,7 @@ public class BingoTasPlayerModule : EverestModule {
         PlayedFiles.Add(f);
         string texttowrite = "";
         foreach (TASFileInfo r in PlayedFiles) {
-            texttowrite += "Read, " + r.path + ", " + r.startlabel + (r.endlabel == "" ? "" : (", " + r.endlabel)) + "\n";
+            texttowrite += "Read, " + r.path + (r.startlabel==""?"":", ") + r.startlabel + ((r.startlabel == "" || r.endlabel == "") ? "" : (", " + r.endlabel)) + "\n";
         }
         File.WriteAllText(TASFilePath, texttowrite);
         Manager.Controller.ReadFile(TASFilePath);
@@ -125,7 +140,17 @@ public class BingoTasPlayerModule : EverestModule {
     private static int lastTASOffset = 0;
     private static bool completedTicks = false;
     private static SortedDictionary<int, bool> results = new();
+    private static MethodInfo rendermenu;
+    private static List<Tuple<int, int>> menushoudopen = new();
 
+    private void Render(On.Monocle.Engine.orig_RenderCore orig, Monocle.Engine self) {
+        orig(self);
+        //menushoudopen.Count > 0 && menushoudopen.Any((t) => t.Item1 < Manager.Controller.CurrentFrameInTas - lastTASOffset && t.Item2 > Manager.Controller.CurrentFrameInTas - lastTASOffset)
+        if (menushoudopen.Count > 0 && menushoudopen.Any((t) => t.Item1 < Manager.Controller.CurrentFrameInTas - lastTASOffset && t.Item2 > Manager.Controller.CurrentFrameInTas - lastTASOffset)) {
+            BingoClient.BingoClient.Instance.MenuTriggered = true;
+            rendermenu.Invoke(BingoClient.BingoClient.Instance, []);
+        }
+    }
     private static void On_Celeste_Update(On.Celeste.Celeste.orig_Update orig, Celeste self, GameTime gameTime) {
         if (Settings.StartBind.Pressed) {
             if (!BingoClient.BingoClient.Instance.Connected) orig(self, gameTime);
@@ -142,7 +167,10 @@ public class BingoTasPlayerModule : EverestModule {
             results.Clear();
             PlayedFiles.Clear();
             StartTas();
-
+            BingoClient.BingoClient bc = BingoClient.BingoClient.Instance;
+            Type BC = bc.GetType();
+            rendermenu = BC.GetMethod("RenderMenu", BindingFlags.Instance | BindingFlags.NonPublic);
+            Logger.Warn("bingotasai", rendermenu.ToString());
         }
         if (route.TickAttempts != null) {
             Objective[] objectives = new Objective[route.TickAttempts.Length];
@@ -173,6 +201,12 @@ public class BingoTasPlayerModule : EverestModule {
                 newroute = router.OnTasCompleted();
             }
             if (newroute != null) {
+                menushoudopen.Clear();
+                if (newroute.Value.TickAttempts != null) {
+                    foreach (var t in newroute.Value.TickAttempts) {
+                        menushoudopen.Add(new(t.Delay - 30, t.Delay + 60));
+                    }
+                }
                 Logger.Info("bingoai", newroute.Value.FilePath.ToString());
                 NextTas(newroute.Value);
                 results.Clear();

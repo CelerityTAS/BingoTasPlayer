@@ -9,7 +9,7 @@ namespace Celeste.Mod.BingoTasPlayer
 {
     public class TASFileInfo
     {
-        public TASFileInfo(string path, string name, string startLabel, string endLabel)
+        public TASFileInfo(string path, string name, string startLabel, string endLabel="")
         {
             this.name = name;
             this.startlabel = startLabel;

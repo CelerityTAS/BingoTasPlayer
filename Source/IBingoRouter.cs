@@ -1,4 +1,7 @@
-﻿namespace Celeste.Mod.BingoTasPlayer;
+﻿using System.Collections.Immutable;
+using System.Linq;
+
+namespace Celeste.Mod.BingoTasPlayer;
 
 public struct RouteChange(TASFileInfo fileinfo, TickAttempt[]? tickAttempts)
 {
