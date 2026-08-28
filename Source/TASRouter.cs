@@ -68,6 +68,8 @@ namespace Celeste.Mod.BingoTasPlayer {
             TASFileInfo rtmwakeup = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Wakeup", "");
             TASFileInfo rtmCassette = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Cassette", "");
             TASFileInfo rtmmenu = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Menu", "");
+            TASFileInfo rtmsummitnocollect = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "SummitNoCollect", "");
+            TASFileInfo rtmsummitcollect = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "SummitCollect", "");
 
             /*
              * These are for navigating the Chapter select Screen
@@ -127,6 +129,151 @@ namespace Celeste.Mod.BingoTasPlayer {
                 new (enter,null),
                 new(new TASObjectiveInfo("1A-start"),new TickAttempt[] {new TickAttempt(0,new Objective("wg",0))}),
                 ];
+
+            #region T11
+            // needs Key1DTS in 9A-powersource-keys
+            RouteChange[] routeeleven = [
+                new (skipchapter, null),
+                new (enter, null),
+                new (new TASObjectiveInfo("2A-fromstart-heart", "Start", "Heart"), null),
+                new (restartchapter, new TickAttempt[] {new TickAttempt(0, new Objective("Old Site Blue Heart", 17))}),
+                new (new TASObjectiveInfo("2A-start-cassette-bino-arb-seeded-1up-2up-3up"), null),
+                new (new TASObjectiveInfo("2A-intervention"), new TickAttempt[] {new TickAttempt(0, new Objective("Get a 1-UP in 2A", 24))}),
+                new (new TASObjectiveInfo("2A-awake-poem", "Start", "Checkpoint"), null),
+                new (rtm, new TickAttempt[] {new TickAttempt(0, new Objective("Read the poem in Awake", 10))}),
+                new (entercp3, null),
+                new (new TASObjectiveInfo("2A-awake-dashless", "RTM"), null),
+                new (leave, new TickAttempt[] {new TickAttempt(0, new Objective("Dashless Awake", 1))}),
+                new (Left, null),
+                new (enterB, null),
+                new (new TASObjectiveInfo("2B-bino"), null),
+                new (loadafromb, new TickAttempt[] {new TickAttempt(0, new Objective("Blue and Red Heart in Old Site", 3))}),
+                new (new TASObjectiveInfo("3A-start-grabless-winged"), null),
+                new (new TASObjectiveInfo("3A-fromhugemess-enterpico"), null),
+                new (new TASObjectiveInfo("pico-berries", "Start", "15"), null),
+                new (leavepico, new TickAttempt[] {new TickAttempt(0, new Objective("10 Berries in PICO-8", 6)), new TickAttempt(0, new Objective("15 Berries in PICO-8", 20))}),
+                new (rtm, null),
+                new (entercp2, null),
+                new (new TASObjectiveInfo("3A-hugemess-cbt-grabless-winged", "RTM"), null),
+                new (new TASObjectiveInfo("3A-shaft-grabless-cassette"), null),
+                new (new TASObjectiveInfo("3A-presidentialsuite-grabless"), null),
+                new (leave, new TickAttempt[] {new TickAttempt(0, new Objective("Grabless Presidential Suite", 5)), new TickAttempt(0, new Objective("Grabless 3A", 11))}),
+                new (Left, null),
+                new (enterB, null),
+                new (new TASObjectiveInfo("3B"), null),
+                new (loadafromb, null),
+                new (new TASObjectiveInfo("4A-start-cassette-arb-seeded"), null),
+                new (new TASObjectiveInfo("4A-shrine-heart-bino-arb"), new TickAttempt[] {new TickAttempt(0, new Objective("Golden Ridge Cassette", 12))}),
+                new (new TASObjectiveInfo("4A-oldtrail-arb"), new TickAttempt[] {new TickAttempt(0, new Objective("20 Berries", 8))}),
+                new (new TASObjectiveInfo("4A-cliffface-bino-arb"), new TickAttempt[] {new TickAttempt(0, new Objective("All Berries in Old Trail", 21))}),
+                new (leave, new TickAttempt[] {new TickAttempt(0, new Objective("All Collectibles in 4A", 2))}),
+                new (enter, null),
+                new (new TASObjectiveInfo("5A-start"), null),
+                new (new TASObjectiveInfo("5A-depths-cassette-winged"), null),
+                new (new TASObjectiveInfo("5A-unraveling"), null),
+                new (new TASObjectiveInfo("5A-search-keys", "Start", "Key1"), null),
+                new (rtm, new TickAttempt[] {new TickAttempt(0, new Objective("Get 1 Key in Search", 13))}),
+                new (enterB, null),
+                new (new TASObjectiveInfo("5B"), null),
+                new (loadafromb, new TickAttempt[] {new TickAttempt(0, new Objective("3 B-Sides", 18)), new TickAttempt(0, new Objective("Mirror Temple B-Side", 22))}),
+                new (new TASObjectiveInfo("6A-start"), null),
+                new (new TASObjectiveInfo("6A-lake-kevin", "Start", "Collect"), null),
+                new (rtm, new TickAttempt[] {new TickAttempt(0, new Objective("Hit a Kevin from all 4 sides", 15))}),
+                new (Right, null),
+                new (entersummit, null),
+                new (new TASObjectiveInfo("7A-0m"), null),
+                new (new TASObjectiveInfo("7A-500m-gem-bino-winged"), null),
+                new (new TASObjectiveInfo("7A-1000m-gem-bino"), new TickAttempt[]{ new TickAttempt(0, new Objective("5 Winged Berries", 19)) }),
+                new (new TASObjectiveInfo("7A-1500m-gem", "Start", "Gem"), new TickAttempt[]{ new TickAttempt(0, new Objective("5 Binos in Summit", 23))}),
+                new (rtm, new TickAttempt[] {new TickAttempt(0, new Objective("1000m and 1500m Gems", 7))}),
+                new (Right, null),
+                new (entercore, null),
+                new (new TASObjectiveInfo("8A-start-intothecore-arb"), null),
+                new (new TASObjectiveInfo("8A-hotandcold-arb"), null),
+                new (new TASObjectiveInfo("8A-heartofthemountain-heart-cassette-arb"), null),
+                new (rtmmenu, new TickAttempt[] {new TickAttempt(0, new Objective("All Collectibles in 8A", 0)), new TickAttempt(0, new Objective("6 Hearts", 14))}),
+                new (Right, null),
+                new (enterfarewell, null),
+                new (new TASObjectiveInfo("9A-start-singular-bino"), null),
+                new (new TASObjectiveInfo("9A-powersource-keys", "DTS", "Key1DTS"), new TickAttempt[] {new TickAttempt(0, new Objective("Use 1 Binocular in 5 Chapters", 9)), new TickAttempt(0, new Objective("Use 2 Binoculars in 4 Chapters", 16))}),
+                new (rtm, new TickAttempt[] {new TickAttempt(0, new Objective("Get 1 Key in Power Source", 4))})
+                ];
+            #endregion T11
+
+            #region T10
+            RouteChange[] routeten = [
+                new (enter,null),
+                new(new TASObjectiveInfo("1A-start-grabless"),null),
+                new(new TASObjectiveInfo("1A-crossing-heart-theo","Start","Heart"),null),
+                new (rtm,null),
+                new (entercp2,null),
+                new(new TASObjectiveInfo("1A-crossing-grabless","RTM"),null),
+                new(new TASObjectiveInfo("1A-chasm-cassette","Start","Cassette"),null),
+                new (rtmCassette,new TickAttempt[] {new TickAttempt(0,new Objective("1ac",4))}),
+                new (entercp3,null),
+                new(new TASObjectiveInfo("1A-chasm-grabless", "RTM"),null),
+                new (leave,null),
+                new (Left,null),
+                new (enterB,null),
+                new(new TASObjectiveInfo("1B-Bino"),null),
+                new (loadafromb,null),
+                new(new TASObjectiveInfo("2A-fromstart-heart","Start","Heart"),null),
+                new (restartchapter,null),
+                new(new TASObjectiveInfo("2A-start-cassette-bino","Start","Cassette"),null),
+                new (rtmCassette,null),
+                new (entercp1P,null),
+                new(new TASObjectiveInfo("2A-start-grabless"),null),
+                new(new TASObjectiveInfo("2A-intervention-grabless"),null),
+                new(new TASObjectiveInfo("2A-awake-theo", "FromGrabless", "TheoEnd"),null),
+                new (rtm,new TickAttempt[] {new TickAttempt(0,new Objective("theoawake",6))}),
+                new (entercp3,null),
+                new(new TASObjectiveInfo("2A-awake-grabless", "RTM"),null),
+                new (leave,new TickAttempt[] {new TickAttempt(0,new Objective("2cg",0))}),
+                new (Left,null),
+                new (enterB,null),
+                new(new TASObjectiveInfo("2B-Bino"),null),
+                new (loadafromb,new TickAttempt[] {new TickAttempt(0,new Objective("2B",13))}),
+                new(new TASObjectiveInfo("3A-start-arb"),null),
+                new(new TASObjectiveInfo("3A-fromhugemess-enterpico"),null),
+                new(new TASObjectiveInfo("pico-berries", "Start", "Orb"),null),
+                new (leavepico,new TickAttempt[] {new TickAttempt(0,new Objective("orbpico",8)),new TickAttempt(0,new Objective("10bpico",10))}),
+                new (rtm,null),
+                new (entercp2,null),
+                new(new TASObjectiveInfo("3A-hugemess-cbt-heart-fast5-winged", "RTM"),null),
+                new(new TASObjectiveInfo("3A-shaft-theo", "Start", "TheoEnd"),new TickAttempt[] {new TickAttempt(0,new Objective("order",21))}),
+                new (rtm,new TickAttempt[] {new TickAttempt(0,new Objective("3theos",1))}),
+                new (skipchapter,null),
+                new (enter,null),
+                new(new TASObjectiveInfo("4A-start-arb"),null),
+                new(new TASObjectiveInfo("4A-shrine-dashless"),new TickAttempt[] {new TickAttempt(0,new Objective("start4aarb",3))}),
+                new (rtm, new TickAttempt[] {new TickAttempt(0,new Objective("dshrine",15))}),
+                new (entercp2,null),
+                new(new TASObjectiveInfo("4A-shrine-heart-bino", "RTM"),null),
+                new(new TASObjectiveInfo("4A-oldtrail-arb-winged"),new TickAttempt[] {new TickAttempt(0,new Objective("4blue",12))}),
+                new(new TASObjectiveInfo("4A-cliffface-bino"),new TickAttempt[] {new TickAttempt(0,new Objective("15b4a",5)), new TickAttempt(0,new Objective("3winged",19))}),
+                new (leave,new TickAttempt[] {new TickAttempt(0,new Objective("7binos",7)), new TickAttempt(0,new Objective("2bionsin3",23))}),
+                new (enter,null),
+                new(new TASObjectiveInfo("5A-start-arb-1up"),null),
+                new(new TASObjectiveInfo("5A-depths-cassette-fast2-seeded"),null),
+                new(new TASObjectiveInfo("5A-unraveling-grabless-arb"),null),
+                new (rtm,new TickAttempt[] {new TickAttempt(0,new Objective("gunraveling",17))}),
+                new (enterB,null),
+                new(new TASObjectiveInfo("5B-seekerstuns20"),null),
+                new (rtmmenu,new TickAttempt[] {new TickAttempt(0,new Objective("15stuns",24)), new TickAttempt(0,new Objective("3A3Bsides",16))}),
+                new (Right,null),
+                new (Right,null),
+                new (entersummit,null),
+                new(new TASObjectiveInfo("7A-0m-gem-fast1"),null),
+                new(new TASObjectiveInfo("7A-500m-gem"),null),
+                new(new TASObjectiveInfo("7A-1000m-gem-arb"),null),
+                new(new TASObjectiveInfo("7A-1500m-gem-cassette-arb-winged-1up", "Start", "ARB"),new TickAttempt[] {new TickAttempt(0,new Objective("arb1k",18))}),
+                new (rtm,new TickAttempt[] {new TickAttempt(0,new Objective("15in4",2)), new TickAttempt(0,new Objective("arb15k",9)), new TickAttempt(0,new Objective("4gems",11)), new TickAttempt(0,new Objective("7ac",20)), new TickAttempt(0,new Objective("1upin2",22))}),
+                new (Right,null),
+                new (entercore,null),
+                new(new TASObjectiveInfo("8A-start-intothecore-switch", "Start", "Collect"),null),
+                new (rtm,new TickAttempt[] {new TickAttempt(0, new Objective("switch", 14))})
+            ];
+            #endregion T10
 
             #region T6
             RouteChange[] routesix = [
@@ -374,6 +521,8 @@ namespace Celeste.Mod.BingoTasPlayer {
              * */
 
             #endregion
+
+            route = new List<RouteChange>(routeeleven);
             foreach (var item in route) Logger.Warn("bingotasAi", item.ToString());
         }
         private static List<RouteChange> route = new();
