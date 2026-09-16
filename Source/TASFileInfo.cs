@@ -22,9 +22,10 @@ namespace Celeste.Mod.BingoTasPlayer
         public string name;
         public string startlabel;
         public string endlabel;
+        public bool hasJump => File.ReadLines(Path.Combine(Everest.PathEverest,"GMBingoPlayer",path)).Any((s) => s.ToLower().StartsWith("play"));
         public override string ToString()
         {
-            return "name: " + name + " | " + "start: " + startlabel + (endlabel == "" ? "" : " | end: " + endlabel);
+            return "name: " + name + " | " + "start: " + startlabel + (endlabel == "" ? "" : " | end: " + endlabel + " ["+(hasJump?"J":" ")+"]");
         }
     }
     public class TASObjectiveInfo : TASFileInfo

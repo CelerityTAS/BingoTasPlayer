@@ -2,8 +2,9 @@
   Version: 0.1.0
   DLL: bin/BingoTasPlayer.dll
   Dependencies:
-    - Name: EverestCore
+    - Name: Everest
       Version: 1.5935.0
     - Name: CelesteTAS
       Version: 3.47.1
-
+    - Name: BingoClient
+      Version: 0.1.18

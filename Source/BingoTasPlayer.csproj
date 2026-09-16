@@ -29,6 +29,9 @@
         <Reference Include="BingoClient">
           <HintPath>..\BingoClient.dll</HintPath>
         </Reference>
+        <Reference Include="BingoUI">
+          <HintPath>..\BingoUI.dll</HintPath>
+        </Reference>
         <Reference Include="CelesteTAS-EverestInterop">
           <HintPath>..\CelesteTAS-EverestInterop.dll</HintPath>
         </Reference>
