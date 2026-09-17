@@ -130,52 +130,52 @@ namespace Celeste.Mod.BingoTasPlayer {
 
             route = [];
             // to see old routes (They will need to be fixed probably. ADD A FRAME OF RIGHT BEFORE SKIPCHAPTER)
-            //Add(TASRoutes.routethriteen);
+            Add(TASRoutes.routethriteen);
 
-            Add(enterChapter(Chapter.C1A, 0));
-            Add("1A-wingedgolden-2winged", GetAfterCompletion(new int[] { 6, 21 }));
-            Add(enterChapter(Chapter.C1A, 2));
-            Add("1A-crossing-heart", "RTM", "Heart", GetAfterLabel(new Dictionary<int, string> { { 15, "Heart" } }));
-            Add(enterChapter(Chapter.C1A, 3));
-            Add("1A-chasm-cassette", "RTM", "Cassette");
-            Add(enterChapter(Chapter.C1B, 0));
-            Add("1B-bino", "Start", "Bino2");
-            Add(enterChapter(Chapter.C2A, 0));
-            Add("2A-fromstart-heart", "Start", "Heart", GetAfterCompletion(new int[] { 15 }));
-            Add(enterChapter(Chapter.C3A, 0));
-            Add("3A-start-grabless-fast5-winged");
-            Add("3A-hugemess-tbc-grabless-heart-winged", GetAfterCompletion(new int[] { 20, 14 }));
-            Add("3A-shaft-grabless-theo", GetAfterLabel(new Dictionary<int, string> { { 22, "Theo" } }));
-            Add("3A-presidentialsuite-grabless-arb");
-            Add(enterChapter(Chapter.C4A, 0));
-            Add("4A-start-grabless-progress5", GetAfterCompletion(new int[] { 4 }));
-            Add("4A-shrine-heart-bino-fast4-collect", "Start", "Heart");
-            Add(enterChapter(Chapter.C4A, 2));
-            Add("4A-shrine-grabless", "RTM");
-            Add("4A-oldtrail-grabless-winged");
-            Add("4A-cliffface-grabless-snowball-bino", GetAfterCompletion(new int[] { 11, 8 }));
-            Add(enterChapter(Chapter.C5A, 0));
-            Add("5A-start-jumpless", GetAfterCompletion(new int[] { 2 }));
-            Add("5A-depths-heart-cassette-arb-winged-seeded-1up", GetAfterCompletion(new int[] { 1, 3, 18 }));
-            Add("5A-unraveling-arb");
-            Add("5A-search");
-            Add("5A-rescue-arb", "Start", "Collect", GetAfterCompletion(new int[] { 23 }));
-            Add(enterChapter(Chapter.C5B, 0));
-            Add("5B", GetAfterCompletion(new int[] { 3, 17 }));
-            Add(enterChapter(Chapter.C6A, 0));
-            Add("6A-start");
-            Add("6A-lake-kevin", "Start", "Collect", GetAfterCompletion(new int[] { 13 }));
-            Add(enterChapter(Chapter.C7A, 0));
-            Add("7A-0m-fast3");
-            Add("7A-500m-bino-winged");
-            Add("7A-1000m-2bino-fast1", GetAfterCompletion(new int[] { 12, 7 }));
-            Add("7A-1500m-arb-winged-1up-2up-3up", "Start", "Collect", GetAfterCompletion(new int[] { 9, 19, 24 }));
-            Add(enterChapter(Chapter.C8A, 0));
-            Add("8A-start-intothecore-arb", "Start", "Collect", GetAfterCompletion(new int[] { 0, 10 }));
-            Add(enterChapter(Chapter.C9, 0));
-            Add("9A-start-singular");
-            Add("9A-powersource-keys-bino", "DTS", "Bino2DTS", GetAfterCompletion(new int[] { 5, 16 }));
-            Add(rtm);
+            //Add(enterChapter(Chapter.C1A, 0));
+            //Add("1A-wingedgolden-2winged", GetAfterCompletion(new int[] { 6, 21 }));
+            //Add(enterChapter(Chapter.C1A, 2));
+            //Add("1A-crossing-heart", "RTM", "Heart", GetAfterLabel(new Dictionary<int, string> { { 15, "Heart" } }));
+            //Add(enterChapter(Chapter.C1A, 3));
+            //Add("1A-chasm-cassette", "RTM", "Cassette");
+            //Add(enterChapter(Chapter.C1B, 0));
+            //Add("1B-bino", "Start", "Bino2");
+            //Add(enterChapter(Chapter.C2A, 0));
+            //Add("2A-fromstart-heart", "Start", "Heart", GetAfterCompletion(new int[] { 15 }));
+            //Add(enterChapter(Chapter.C3A, 0));
+            //Add("3A-start-grabless-fast5-winged");
+            //Add("3A-hugemess-tbc-grabless-heart-winged", GetAfterCompletion(new int[] { 20, 14 }));
+            //Add("3A-shaft-grabless-theo", GetAfterLabel(new Dictionary<int, string> { { 22, "Theo" } }));
+            //Add("3A-presidentialsuite-grabless-arb");
+            //Add(enterChapter(Chapter.C4A, 0));
+            //Add("4A-start-grabless-progress5", GetAfterCompletion(new int[] { 4 }));
+            //Add("4A-shrine-heart-bino-fast4-collect", "Start", "Heart");
+            //Add(enterChapter(Chapter.C4A, 2));
+            //Add("4A-shrine-grabless", "RTM");
+            //Add("4A-oldtrail-grabless-winged");
+            //Add("4A-cliffface-grabless-snowball-bino", GetAfterCompletion(new int[] { 11, 8 }));
+            //Add(enterChapter(Chapter.C5A, 0));
+            //Add("5A-start-jumpless", GetAfterCompletion(new int[] { 2 }));
+            //Add("5A-depths-heart-cassette-arb-winged-seeded-1up", GetAfterCompletion(new int[] { 1, 3, 18 }));
+            //Add("5A-unraveling-arb");
+            //Add("5A-search");
+            //Add("5A-rescue-arb", "Start", "Collect", GetAfterCompletion(new int[] { 23 }));
+            //Add(enterChapter(Chapter.C5B, 0));
+            //Add("5B", GetAfterCompletion(new int[] { 3, 17 }));
+            //Add(enterChapter(Chapter.C6A, 0));
+            //Add("6A-start");
+            //Add("6A-lake-kevin", "Start", "Collect", GetAfterCompletion(new int[] { 13 }));
+            //Add(enterChapter(Chapter.C7A, 0));
+            //Add("7A-0m-fast3");
+            //Add("7A-500m-bino-winged");
+            //Add("7A-1000m-2bino-fast1", GetAfterCompletion(new int[] { 12, 7 }));
+            //Add("7A-1500m-arb-winged-1up-2up-3up", "Start", "Collect", GetAfterCompletion(new int[] { 9, 19, 24 }));
+            //Add(enterChapter(Chapter.C8A, 0));
+            //Add("8A-start-intothecore-arb", "Start", "Collect", GetAfterCompletion(new int[] { 0, 10 }));
+            //Add(enterChapter(Chapter.C9, 0));
+            //Add("9A-start-singular");
+            //Add("9A-powersource-keys-bino", "DTS", "Bino2DTS", GetAfterCompletion(new int[] { 5, 16 }));
+            //Add(rtm);
         }
         private static Func<TickAttempt[]> GetAfterCompletion(int[] indices) {
             return () => {
@@ -206,31 +206,40 @@ namespace Celeste.Mod.BingoTasPlayer {
         }
         private static void Add(string name, TickAttempt[] ticks = null) {
             route.Add(new(new TASObjectiveInfo(name), ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name));
         }
         private static void Add(string name, string start, TickAttempt[] ticks = null) {
             route.Add(new(new TASObjectiveInfo(name, start), ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name, start));
         }
         private static void Add(string name, string start, string end, TickAttempt[] ticks = null) {
             route.Add(new(new TASObjectiveInfo(name, start, end), ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name, start, end));
         }
         private static void Add(string name, Func<TickAttempt[]> ticks) {
             route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name) }, ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name));
         }
         private static void Add(string name, string start, Func<TickAttempt[]> ticks) {
             route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name, start) }, ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name, start));
         }
         private static void Add(string name, string start, string end, Func<TickAttempt[]> ticks) {
             route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name, start, end) }, ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name, start, end));
         }
         private static void Add(Func<TASFileInfo[]> file, TickAttempt[] ticks = null) {
             route.Add(new(file, () => ticks));
+            //Does not need Validation
         }
         private static void Add(Func<TASFileInfo[]> file, Func<TickAttempt[]> ticks) {
             route.Add(new(file, ticks));
+            //Does not need Validation
         }
         private static void Add(RouteChange[] oldroute) {
             foreach (RouteChange change in oldroute) {
                 Add(change.FilePath, change.TickAttempts);
+                TASFileInfo.Validate(change.FilePath);
             }
         }
 
