@@ -229,11 +229,15 @@ namespace Celeste.Mod.BingoTasPlayer {
             };
         }
 
+        #region AddFunctions
         private static void Add(TASFileInfo info, TickAttempt[] ticks = null) {
             route.Add(new(info, ticks));
         }
         private static void Add(TASFileInfo info, Func<TickAttempt[]> ticks) {
             route.Add(new(() => new TASFileInfo[] { info }, ticks));
+        }
+        private static void Add(TASFileInfo info, Func<TickAttempt[]> ticks1, Func<TickAttempt[]> ticks2) {
+            route.Add(new(() => new TASFileInfo[] { info }, () => { return ticks1.Invoke().Concat(ticks2.Invoke()).ToArray(); }));
         }
         private static void Add(string name, TickAttempt[] ticks = null) {
             route.Add(new(new TASObjectiveInfo(name), ticks));
@@ -251,12 +255,24 @@ namespace Celeste.Mod.BingoTasPlayer {
             route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name) }, ticks));
             TASFileInfo.Validate(new TASObjectiveInfo(name));
         }
+        private static void Add(string name, Func<TickAttempt[]> ticks1, Func<TickAttempt[]> ticks2) {
+            route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name) }, () => { return ticks1.Invoke().Concat(ticks2.Invoke()).ToArray(); }));
+            TASFileInfo.Validate(new TASObjectiveInfo(name));
+        }
         private static void Add(string name, string start, Func<TickAttempt[]> ticks) {
             route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name, start) }, ticks));
             TASFileInfo.Validate(new TASObjectiveInfo(name, start));
         }
+        private static void Add(string name, string start, Func<TickAttempt[]> ticks1, Func<TickAttempt[]> ticks2) {
+            route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name, start) }, () => { return ticks1.Invoke().Concat(ticks2.Invoke()).ToArray(); }));
+            TASFileInfo.Validate(new TASObjectiveInfo(name, start));
+        }
         private static void Add(string name, string start, string end, Func<TickAttempt[]> ticks) {
             route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name, start, end) }, ticks));
+            TASFileInfo.Validate(new TASObjectiveInfo(name, start, end));
+        }
+        private static void Add(string name, string start, string end, Func<TickAttempt[]> ticks1, Func<TickAttempt[]> ticks2) {
+            route.Add(new(() => new TASFileInfo[] { new TASObjectiveInfo(name, start, end) }, () => { return ticks1.Invoke().Concat(ticks2.Invoke()).ToArray(); }));
             TASFileInfo.Validate(new TASObjectiveInfo(name, start, end));
         }
         private static void Add(Func<TASFileInfo[]> file, TickAttempt[] ticks = null) {
@@ -267,12 +283,17 @@ namespace Celeste.Mod.BingoTasPlayer {
             route.Add(new(file, ticks));
             //Does not need Validation
         }
+        private static void Add(Func<TASFileInfo[]> file, Func<TickAttempt[]> ticks1, Func<TickAttempt[]> ticks2) {
+            route.Add(new(file, () => { return ticks1.Invoke().Concat(ticks2.Invoke()).ToArray(); }));
+            //Does not need Validation
+        }
         private static void Add(RouteChange[] oldroute) {
             foreach (RouteChange change in oldroute) {
                 Add(change.FilePath, change.TickAttempts);
                 TASFileInfo.Validate(change.FilePath);
             }
         }
+#endregion
 
         private static List<RouteAction> route = new();
         private static RouteChange previous;
@@ -492,14 +513,17 @@ namespace Celeste.Mod.BingoTasPlayer {
                 // 1. Step: get to menu
                 //Check how the last played file ended:
                 string lastEndLabel = prev.FilePath.endlabel;
-                string[] immediatertm = { "Seeded", "Winged", "Heart", "Cutscene", "TheoEnd", "TheoEndStart", "ARB", "Collect", "Key", "Bottom", "Top", "Library", "2000M", "2K", "Bino1", "Bino", "Bino2", "Bino3", "Bino4", "Key1", "Key2", "Key3", "Key4", "Key5", "Key1DTS", "Key2DTS", "Key3DTS", "Key4DTS", "Key5DTS" };
                 if (lastEndLabel == "Cassette") {
                     ret.Add(rtmCassette);
                 } else if (lastEndLabel == "") {
                     string[] rtmchapters = { "1B", "2B", "3B", "4B", "5B", "6B", "7B", "8A-heartofthemountain" };
                     string[] leavecheckpoints = { "1A-chasm", "1A-wingedgolden", "2A-awake", "3A-presidentialsuite", "4A-cliffface", "5A-rescue", "resolution", "7A-3000m", "8A-heartofthemountain" };
+                    string[] wakeupcheckpoints = { "2A-intervention", "5A-depths" };
                     if (rtmchapters.Any((c) => prev.FilePath.name.Contains(c))) ret.Add(rtmmenu);
-                    else if (prev.FilePath.name == "start") { } else if (prev.FilePath.name.Contains("2A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("1A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("leavepico")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("6A-fromhollows")) { ret.Add(rtmmenu); } else if (leavecheckpoints.Any(cp => prev.FilePath.name.Contains(cp))) { ret.Add(leave); currentchapter++; } else if (prev.FilePath.name.Contains("7A")) { ret.Add(rtmsummitcollect); } else {
+                    else if (prev.FilePath.name == "start") { } else if (prev.FilePath.name.Contains("2A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("1A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("leavepico")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("6A-fromhollows")) { ret.Add(rtmmenu); } else if (wakeupcheckpoints.Any(v => prev.FilePath.name.Contains(v))) {
+                        ret.Add(rtmwakeup);
+                    }
+                    else if (leavecheckpoints.Any(cp => prev.FilePath.name.Contains(cp))) { ret.Add(leave); currentchapter++; } else if (prev.FilePath.name.Contains("7A")) { ret.Add(rtmsummitcollect); } else {
                         ret.Add(rtm);
                     }
                 } else {
