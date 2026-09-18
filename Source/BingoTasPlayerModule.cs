@@ -75,7 +75,7 @@ public class BingoTasPlayerModule : EverestModule {
     //Path to get between TASFilePath and the GMBingoPlayer Repository as a relative path
     public static string GMBingoPlayerRepoRelativePath = "../GMBingoPlayer/";
     private static List<TASFileInfo> PlayedFiles = new();
-    private static IBingoRouter router = new TASRouter();
+    public static IBingoRouter router = new TASRouter();
     private static RouteChange route;
     public static void StartTas() {
         route = new RouteChange(new(GMBingoPlayerRepoRelativePath + "start.tas", "start", "0"), null);
@@ -157,7 +157,7 @@ public class BingoTasPlayerModule : EverestModule {
         if (!BingoClient.BingoClient.Instance.Connected) { return false; }
         if (recentBoard == null) return true;
         for (int i = 0; i < 25; i++) {
-            // if our recentboard and the board bingoclient have differ in claimed objectives
+            // if our recentboard and the board bingoclient have differ in claimed objectives   
             if ((BingoClient.BingoClient.Instance.GetObjectiveStatus(i) == ObjectiveStatus.Claimed && recentBoard[i] == "blank") || (BingoClient.BingoClient.Instance.GetObjectiveStatus(i) != ObjectiveStatus.Claimed && (recentBoard[i] != "blank" && recentBoard[i] != "" && recentBoard[i] != null))) return true;
         }
         return false;
@@ -177,7 +177,7 @@ public class BingoTasPlayerModule : EverestModule {
     private void Render(On.Monocle.Engine.orig_RenderCore orig, Monocle.Engine self) {
         orig(self);
         //menushoudopen.Count > 0 && menushoudopen.Any((t) => t.Item1 < Manager.Controller.CurrentFrameInTas - lastTASOffset && t.Item2 > Manager.Controller.CurrentFrameInTas - lastTASOffset)
-        if (menushoudopen.Count > 0 && menushoudopen.Any((t) => t.Item1 < Manager.Controller.CurrentFrameInTas - lastTASOffset && t.Item2 > Manager.Controller.CurrentFrameInTas - lastTASOffset)) {
+        if (menushoudopen.Count > 0 && menushoudopen.Any((t) => t.Item1 < frameInTAS && t.Item2 > frameInTAS)) {
             BingoClient.BingoClient.Instance.MenuTriggered = true;
             rendermenu.Invoke(BingoClient.BingoClient.Instance, []);
         }
@@ -211,7 +211,8 @@ public class BingoTasPlayerModule : EverestModule {
 
             for (int i = 0; i < route.TickAttempts.Length; i++) {
                 TickAttempt v = route.TickAttempts[i];
-                if (Manager.Controller.CurrentFrameInTas > lastTASOffset + v.Delay && !results.ContainsKey(i)) {
+                if (frameInTAS > v.Delay && !results.ContainsKey(i)) {
+                    Logger.Info("bingoai", "Ticking: " + v.Objective);
                     results[i] = TryTick(v.Objective.index);
                 }
             }
@@ -233,7 +234,6 @@ public class BingoTasPlayerModule : EverestModule {
             Logger.Info("bingoai", "Board Changed");
             var board = BingoClient.BingoClient.Instance.GetBoard();
             if (recentBoard == null) recentBoard = new string[board.Count];
-            string[] colors = new string[board.Count];
             List<Objective> changes = new();
             for (int i = 0; i < board.Count; i++) {
                 if (board[i].colors != recentBoard[i]) {
@@ -270,9 +270,14 @@ public class BingoTasPlayerModule : EverestModule {
         }
         if (changedtas == 1) changedtas++;
 
-        if (playfixnumber != 0 && playfixnumber <= Manager.Controller.CurrentFrameInTas - lastTASOffset) {
+        if (playfixnumber != 0 && playfixnumber <= frameInTAS) {
             // This is all the frames that are not supposed to happen:
             // we want to reset the tas file to no longer have the RTM problem
+            foreach (var ta in route.TickAttempts) {
+                if (ta.Delay >= playfixnumber-1) {
+                    TryTick(ta.Objective.index);
+                }
+            }
             PlayedFiles.Clear();
             cummplayfixnumber = Manager.Controller.CurrentFrameInTas;
             Manager.Controller.NeedsReload = true;
@@ -280,16 +285,17 @@ public class BingoTasPlayerModule : EverestModule {
 
         // Logic for completed Files
         // Might want to restart the tas to deal with in checkpoint stops
-        if ((!Manager.Controller.CanPlayback && PlayedFiles.Count > 0 )|| (playfixnumber != 0 && playfixnumber <= Manager.Controller.CurrentFrameInTas - lastTASOffset)) {
+        if ((!Manager.Controller.CanPlayback && PlayedFiles.Count > 0 )|| (playfixnumber != 0 && playfixnumber <= frameInTAS)) {
             lastTASOffset = Manager.Controller.CurrentFrameInTas + 1;
             RouteChange? newroute = router.OnTasCompleted();
             TASRouter.unlockedChapters();
 
             if (newroute != null) {
                 changedtas = 1;
-                List<Tuple<int, int>> shouldremain = menushoudopen.FindAll(t => t.Item2 >= Manager.Controller.Inputs.Count - 60).Select(v => new Tuple<int, int>(0, 60)).ToList();
+                //List<Tuple<int, int>> shouldremain = menushoudopen.FindAll(t => t.Item2 >= Manager.Controller.Inputs.Count- lastTASOffset - 60 && !(t.Item1==0 && t.Item2==60)).Select(v => new Tuple<int, int>(0, 60)).ToList();
                 menushoudopen.Clear();
-                menushoudopen.AddRange(shouldremain);
+                //Logger.Warn("bingoai", "" + shouldremain.Count + " Objectives remain to be seen");
+                //menushoudopen.AddRange(shouldremain);
 
                 Logger.Info("bingoai", newroute.Value.FilePath.ToString());
                 NextTas(newroute.Value);

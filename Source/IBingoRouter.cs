@@ -42,4 +42,5 @@ public interface IBingoRouter
     public RouteChange? OnTasCompleted();
     public TickAttempt[] GetTickAttempts();
     public void SetBoard(Objective[] objectives);
+    public Objective[] getBoard();
 }

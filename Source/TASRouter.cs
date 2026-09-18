@@ -130,57 +130,85 @@ namespace Celeste.Mod.BingoTasPlayer {
 
             route = [];
             // to see old routes (They will need to be fixed probably. ADD A FRAME OF RIGHT BEFORE SKIPCHAPTER)
-            Add(TASRoutes.routethriteen);
+            //Add(TASRoutes.routethriteen);
 
-            //Add(enterChapter(Chapter.C1A, 0));
-            //Add("1A-wingedgolden-2winged", GetAfterCompletion(new int[] { 6, 21 }));
-            //Add(enterChapter(Chapter.C1A, 2));
-            //Add("1A-crossing-heart", "RTM", "Heart", GetAfterLabel(new Dictionary<int, string> { { 15, "Heart" } }));
-            //Add(enterChapter(Chapter.C1A, 3));
-            //Add("1A-chasm-cassette", "RTM", "Cassette");
-            //Add(enterChapter(Chapter.C1B, 0));
-            //Add("1B-bino", "Start", "Bino2");
-            //Add(enterChapter(Chapter.C2A, 0));
-            //Add("2A-fromstart-heart", "Start", "Heart", GetAfterCompletion(new int[] { 15 }));
-            //Add(enterChapter(Chapter.C3A, 0));
-            //Add("3A-start-grabless-fast5-winged");
-            //Add("3A-hugemess-tbc-grabless-heart-winged", GetAfterCompletion(new int[] { 20, 14 }));
-            //Add("3A-shaft-grabless-theo", GetAfterLabel(new Dictionary<int, string> { { 22, "Theo" } }));
-            //Add("3A-presidentialsuite-grabless-arb");
-            //Add(enterChapter(Chapter.C4A, 0));
-            //Add("4A-start-grabless-progress5", GetAfterCompletion(new int[] { 4 }));
-            //Add("4A-shrine-heart-bino-fast4-collect", "Start", "Heart");
-            //Add(enterChapter(Chapter.C4A, 2));
-            //Add("4A-shrine-grabless", "RTM");
-            //Add("4A-oldtrail-grabless-winged");
-            //Add("4A-cliffface-grabless-snowball-bino", GetAfterCompletion(new int[] { 11, 8 }));
-            //Add(enterChapter(Chapter.C5A, 0));
-            //Add("5A-start-jumpless", GetAfterCompletion(new int[] { 2 }));
-            //Add("5A-depths-heart-cassette-arb-winged-seeded-1up", GetAfterCompletion(new int[] { 1, 3, 18 }));
-            //Add("5A-unraveling-arb");
-            //Add("5A-search");
-            //Add("5A-rescue-arb", "Start", "Collect", GetAfterCompletion(new int[] { 23 }));
-            //Add(enterChapter(Chapter.C5B, 0));
-            //Add("5B", GetAfterCompletion(new int[] { 3, 17 }));
-            //Add(enterChapter(Chapter.C6A, 0));
-            //Add("6A-start");
-            //Add("6A-lake-kevin", "Start", "Collect", GetAfterCompletion(new int[] { 13 }));
-            //Add(enterChapter(Chapter.C7A, 0));
-            //Add("7A-0m-fast3");
-            //Add("7A-500m-bino-winged");
-            //Add("7A-1000m-2bino-fast1", GetAfterCompletion(new int[] { 12, 7 }));
-            //Add("7A-1500m-arb-winged-1up-2up-3up", "Start", "Collect", GetAfterCompletion(new int[] { 9, 19, 24 }));
-            //Add(enterChapter(Chapter.C8A, 0));
-            //Add("8A-start-intothecore-arb", "Start", "Collect", GetAfterCompletion(new int[] { 0, 10 }));
-            //Add(enterChapter(Chapter.C9, 0));
-            //Add("9A-start-singular");
-            //Add("9A-powersource-keys-bino", "DTS", "Bino2DTS", GetAfterCompletion(new int[] { 5, 16 }));
-            //Add(rtm);
+
+            /*
+             * Weekly Blackout t16
+                159745 
+                Gen: Solo Blackout
+                Progression: Tournament Standard
+                https://celestebingo.rhelmot.io/room/VkgWE7reQ8e6S5-V3Xia0g?password=gg
+
+                1B or Farewell binos?
+             * */https://celestebingo.rhelmot.io/room/wJt_qo8ZRTO51BS4WkQivA?password=s
+                       // Seed: 306187 | Varient: Lockout | Optimized: Lockout
+            Add(enterChapter(Chapter.C1A, 0));
+            Add("1A-start-progress4-winged");
+            Add("1A-crossing-progress2");
+            Add("1A-chasm-collect", GetAfterLabel(new Dictionary<int, string> { { 14, "1UP" } }));
+            Add(enterChapter(Chapter.C2A, 0));
+            Add("2A-fromstart-heart", "Start", "Heart", GetAfterCompletion(new int[] { 23 }));
+            Add(restartchapter);
+            Add("2A-start-cassette-seeded", "Start", "Seeded");
+            Add(enterChapter(Chapter.C1A, 3));
+            Add("1A-chasm-cassette", "RTM", "Cassette", GetAfterCompletion(new int[] { 0 }));
+            Add(enterChapter(Chapter.C2B, 0));
+            Add("2B");
+            Add(enterChapter(Chapter.C4A, 0));
+            Add("4A-start-cassette-seeded");
+            Add("4A-shrine-heart", GetAfterLabel(new Dictionary<int, string> { { 13, "Heart" } }));
+            Add("4A-oldtrail");
+            Add("4A-cliffface");
+            Add(enterChapter(Chapter.C5A, 0));
+            Add("5A-start-1up");
+            Add("5A-depths-cassette-arb-winged-seeded", "Start", "ARB", () => GetAfterCompletion(new int[] { 5 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 4, "Seeded" } })()).ToArray());
+            Add(enterChapter(Chapter.C5B, 0));
+            Add("5B-seekerkill", () => GetAfterCompletion(new int[] { 19 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 21, "Seeker" } })()).ToArray());
+            Add(enterChapter(Chapter.C7A, 0));
+            Add("7A-0m-gem-fast3");
+            Add("7A-500m-gem-arb-winged");
+            Add("7A-1000m-gem-arb", GetAfterLabel(new Dictionary<int, string> { { 24, "Gem" } }));
+            Add("7A-1500m", "Start", "1000mARBCollect", GetAfterCompletion(new int[] { 20 }));
+            Add(enterChapter(Chapter.C3A, 0));
+            Add("3A-start-arb-winged", () => GetAfterCompletion(new int[] { 10 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 12, "ARB" } })()).ToArray());
+            Add("3A-hugemess-btc-heart-fast5-winged", () => GetAfterCompletion(new int[] { 22, 8 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 6, "Heart" } })()).ToArray());
+            Add("3A-shaft-cassette", "Start", "Cassette");
+            Add(enterChapter(Chapter.C3B, 0));
+            Add("3B", GetAfterCompletion(new int[] { 9 }));
+            Add(enterChapter(Chapter.C5A, 2));
+            Add("5A-depths-grabless", "RTM", GetAfterCompletion(new int[] { 3 }));
+            Add("5A-unraveling");
+            Add("5A-search-keys", "Start", "Key3", GetAfterCompletion(new int[] { 17 }));
+            Add(enterChapter(Chapter.C8A, 0));
+            Add("8A-start-intothecore");
+            Add("8A-hotandcold");
+            Add("8A-heartofthemountain-heart", GetAfterCompletion(new int[] { 18, 15 }));
+            Add(enterChapter(Chapter.C4B, 0));
+            Add("4B");
+            Add(enterChapter(Chapter.C1B, 0));
+            Add("1B", GetAfterCompletion(new int[] { 2 }));
+            Add(enterChapter(Chapter.C9, 0));
+            Add("9A-start-singular");
+            Add("9A-powersource-keys", "DTS", "Key3DTS", GetAfterCompletion(new int[] { 1 }));
+            Add(enterChapter(Chapter.C7A, 4));
+            Add("7A-1500m", "RTM");
+            Add("7A-2000m-gem");
+            Add("7A-2500m-gem", "Start", "Gem", GetAfterCompletion(new int[] { 11 }));
+            Add(enterChapter(Chapter.C1A, 2));
+            Add("1A-crossing-dashless", "RTM", GetAfterCompletion(new int[] { 7 }));
+            Add(enterChapter(Chapter.C3A, 2));
+            Add("3A-fromhugemess-enterpico", "RTM");
+            Add("pico-berries", "Start", "5Berries");
+            Add(leavepico, new TickAttempt[] { new TickAttempt(0,new Objective("Obj 21",21)) });
+            Add(rtm);
+
+
         }
         private static Func<TickAttempt[]> GetAfterCompletion(int[] indices) {
             return () => {
                 int delay = Manager.Controller.Inputs.Count - Manager.Controller.CurrentFrameInTas - 1;
-                TickAttempt[] ticks = indices.Select((i) => new TickAttempt(delay, new Objective("Objective " + i, i))).ToArray();
+                TickAttempt[] ticks = indices.Select((i) => new TickAttempt(delay, getObjective(BingoTasPlayerModule.router, i))).ToArray();
                 return ticks;
             };
         }
@@ -196,13 +224,16 @@ namespace Celeste.Mod.BingoTasPlayer {
                         return new Tuple<int, int>(v.Key, Manager.Controller.Inputs.Count - Manager.Controller.CurrentFrameInTas - 1);
                     }
                 }).ToList();
-                TickAttempt[] ticks = delays.Select(v => new TickAttempt(v.Item2, new Objective("Objective " + v.Item1, v.Item1))).ToArray();
+                TickAttempt[] ticks = delays.Select(v => new TickAttempt(v.Item2, getObjective(BingoTasPlayerModule.router, v.Item1))).ToArray();
                 return ticks;
             };
         }
 
         private static void Add(TASFileInfo info, TickAttempt[] ticks = null) {
             route.Add(new(info, ticks));
+        }
+        private static void Add(TASFileInfo info, Func<TickAttempt[]> ticks) {
+            route.Add(new(() => new TASFileInfo[] { info }, ticks));
         }
         private static void Add(string name, TickAttempt[] ticks = null) {
             route.Add(new(new TASObjectiveInfo(name), ticks));
@@ -276,10 +307,11 @@ namespace Celeste.Mod.BingoTasPlayer {
             previous.FilePath.endlabel = "" + 0;
             return previous;
         }
-
         public Objective[] board;
+        public Objective[] getBoard() { return board; }
 
-        public Objective getObjective(int i) {
+        public static Objective getObjective(IBingoRouter router, int i) {
+            Objective[] board = router.getBoard();
             if (board == null) {
                 return new Objective("Objective " + i, i);
             } else {
@@ -455,16 +487,13 @@ namespace Celeste.Mod.BingoTasPlayer {
                     }
                 }
 
-                // Check if chapter is unlocked TBA:
                 // Check if Checkpoint is in Range TBA:
 
                 // 1. Step: get to menu
                 //Check how the last played file ended:
                 string lastEndLabel = prev.FilePath.endlabel;
                 string[] immediatertm = { "Seeded", "Winged", "Heart", "Cutscene", "TheoEnd", "TheoEndStart", "ARB", "Collect", "Key", "Bottom", "Top", "Library", "2000M", "2K", "Bino1", "Bino", "Bino2", "Bino3", "Bino4", "Key1", "Key2", "Key3", "Key4", "Key5", "Key1DTS", "Key2DTS", "Key3DTS", "Key4DTS", "Key5DTS" };
-                if (lastEndLabel.StartsWith("lvl_") || immediatertm.Contains(lastEndLabel)) {
-                    ret.Add(rtm);
-                } else if (lastEndLabel == "Cassette") {
+                if (lastEndLabel == "Cassette") {
                     ret.Add(rtmCassette);
                 } else if (lastEndLabel == "") {
                     string[] rtmchapters = { "1B", "2B", "3B", "4B", "5B", "6B", "7B", "8A-heartofthemountain" };
@@ -473,6 +502,8 @@ namespace Celeste.Mod.BingoTasPlayer {
                     else if (prev.FilePath.name == "start") { } else if (prev.FilePath.name.Contains("2A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("1A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("leavepico")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("6A-fromhollows")) { ret.Add(rtmmenu); } else if (leavecheckpoints.Any(cp => prev.FilePath.name.Contains(cp))) { ret.Add(leave); currentchapter++; } else if (prev.FilePath.name.Contains("7A")) { ret.Add(rtmsummitcollect); } else {
                         ret.Add(rtm);
                     }
+                } else {
+                    ret.Add(rtm);
                 }
 
                 // 2. Step: move to right chapter
