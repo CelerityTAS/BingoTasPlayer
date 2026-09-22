@@ -156,6 +156,7 @@ public class BingoTasPlayerModule : EverestModule {
     public static bool HasBoardChanged() {
         if (!BingoClient.BingoClient.Instance.Connected) { return false; }
         if (recentBoard == null) return true;
+        if (!isLockout) return false;
         for (int i = 0; i < 25; i++) {
             // if our recentboard and the board bingoclient have differ in claimed objectives   
             if ((BingoClient.BingoClient.Instance.GetObjectiveStatus(i) == ObjectiveStatus.Claimed && recentBoard[i] == "blank") || (BingoClient.BingoClient.Instance.GetObjectiveStatus(i) != ObjectiveStatus.Claimed && (recentBoard[i] != "blank" && recentBoard[i] != "" && recentBoard[i] != null))) return true;
@@ -173,6 +174,7 @@ public class BingoTasPlayerModule : EverestModule {
     private static MethodInfo rendermenu;
     private static List<Tuple<int, int>> menushoudopen = new();
     private static int changedtas = 0;
+    private static bool isLockout => BingoClient.BingoClient.Instance.IsLockout;
 
     private void Render(On.Monocle.Engine.orig_RenderCore orig, Monocle.Engine self) {
         orig(self);
@@ -286,13 +288,14 @@ public class BingoTasPlayerModule : EverestModule {
         // Logic for completed Files
         // Might want to restart the tas to deal with in checkpoint stops
         if ((!Manager.Controller.CanPlayback && PlayedFiles.Count > 0 )|| (playfixnumber != 0 && playfixnumber <= frameInTAS)) {
+
+            //List<Tuple<int, int>> shouldremain = menushoudopen.FindAll(t => t.Item2 - frameInTAS > 0).Select(t => new Tuple<int, int>(0, t.Item2 - frameInTAS)).ToList();
             lastTASOffset = Manager.Controller.CurrentFrameInTas + 1;
             RouteChange? newroute = router.OnTasCompleted();
-            TASRouter.unlockedChapters();
 
             if (newroute != null) {
                 changedtas = 1;
-                //List<Tuple<int, int>> shouldremain = menushoudopen.FindAll(t => t.Item2 >= Manager.Controller.Inputs.Count- lastTASOffset - 60 && !(t.Item1==0 && t.Item2==60)).Select(v => new Tuple<int, int>(0, 60)).ToList();
+               
                 menushoudopen.Clear();
                 //Logger.Warn("bingoai", "" + shouldremain.Count + " Objectives remain to be seen");
                 //menushoudopen.AddRange(shouldremain);

@@ -17,6 +17,7 @@ namespace Celeste.Mod.BingoTasPlayer {
         }
         public RouteChange[] Get() {
             TASFileInfo[] fi = Action.Invoke();
+            if (fi == null) { return null; };
             RouteChange[] ra = fi.Select((f) => new RouteChange(f, null)).ToArray();
             ra[0].TickAttempts = tickAttemts;
             return ra;
