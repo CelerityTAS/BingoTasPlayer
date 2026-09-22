@@ -134,66 +134,56 @@ namespace Celeste.Mod.BingoTasPlayer {
 
 
             //https://celestebingo.rhelmot.io/room/wJt_qo8ZRTO51BS4WkQivA?password=s
-            // Seed: 306187 | Varient: Lockout | Optimized: Lockout
+            // Seed: 306566 | Varient: Lockout | Optimized: Lockout | https://celestebingo.rhelmot.io/room/BtWtPRz0TWGfxFqg0pepqA?password=sa
             Add(enterChapter(Chapter.C1A, 0));
-            Add("1A-start-progress4-winged");
-            Add("1A-crossing-progress2");
-            Add("1A-chasm-collect", GetAfterLabel(new Dictionary<int, string> { { 14, "1UP" } }));
+            Add("1A-start-arb-winged-1up", GetAfterLabel(new Dictionary<int, string> { { 21, "1UP" } }));
+            Add("1A-crossing-heart-fast4-collect", GetAfterLabel(new Dictionary<int, string> { { 5, "Heart" } }));
+            Add("1A-chasm-progress2-winged");
             Add(enterChapter(Chapter.C2A, 0));
-            Add("2A-fromstart-heart", "Start", "Heart", GetAfterCompletion(new int[] { 23 }));
-            Add(restartchapter);
-            Add("2A-start-cassette-seeded", "Start", "Seeded");
-            Add(enterChapter(Chapter.C1A, 3));
-            Add("1A-chasm-cassette", "RTM", "Cassette", GetAfterCompletion(new int[] { 0 }));
-            Add(enterChapter(Chapter.C2B, 0));
-            Add("2B");
-            Add(enterChapter(Chapter.C4A, 0));
-            Add("4A-start-cassette-seeded");
-            Add("4A-shrine-heart", GetAfterLabel(new Dictionary<int, string> { { 13, "Heart" } }));
-            Add("4A-oldtrail");
-            Add("4A-cliffface");
-            Add(enterChapter(Chapter.C5A, 0));
-            Add("5A-start-1up");
-            Add("5A-depths-cassette-arb-winged-seeded", "Start", "ARB", () => GetAfterCompletion(new int[] { 5 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 4, "Seeded" } })()).ToArray());
-            Add(enterChapter(Chapter.C5B, 0));
-            Add("5B-seekerkill", () => GetAfterCompletion(new int[] { 19 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 21, "Seeker" } })()).ToArray());
-            Add(enterChapter(Chapter.C7A, 0));
-            Add("7A-0m-gem-fast3");
-            Add("7A-500m-gem-arb-winged");
-            Add("7A-1000m-gem-arb", GetAfterLabel(new Dictionary<int, string> { { 24, "Gem" } }));
-            Add("7A-1500m", "Start", "1000mARBCollect", GetAfterCompletion(new int[] { 20 }));
-            AddIf(NFree(new int[] { 12, 22, 6, 9 }, 2), enterChapter(Chapter.C3A));
-            AddIf(NWasFree(), "3A-start-arb-winged", () => GetAfterCompletion(new int[] { 10 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 12, "ARB" } })()).ToArray());
-            AddIf(NWasFree(),"3A-hugemess-btc-heart-fast5-winged", () => GetAfterCompletion(new int[] { 22, 8 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 6, "Heart" } })()).ToArray());
-            AddIf(NWasFree(), "3A-shaft-cassette", "Start", "Cassette");
+            Add("2A-start-seeded");
+            Add("2A-intervention-arb-1up-2up-3up", GetAfterCompletion(new int[] { 19 }));
+            Add("2A-awake-arb-winged");
+            AddIf(NFree(new int[] { 3 }, 1), enterChapter(Chapter.C3A, 0));
+            AddIf(NWasFree(), "3A-start-grabless-winged", GetAfterLabel(new Dictionary<int, string> { { 3, "Winged" } }));
+            AddIf(NWasFree(), "3A-hugemess-tbc-grabless-heart-fast5-winged");
+            AddIf(NWasFree(), "3A-shaft-grabless-cassette-diary-arb", GetAfterLabel(new Dictionary<int, string> { { 16, "Diary" }, { 24, "Diary" }, { 8, "Cassette" }, { 1, "Diary" } }));
+            AddIf(NWasFree(), "3A-presidentialsuite-grabless", GetAfterCompletion(new int[] { 14 }));
+            AddIf(NWasFree(), enterChapter(Chapter.C4A, 0));
+            AddIf(NWasFree(), "4A-start-cassette-bino-seeded", GetAfterLabel(new Dictionary<int, string> { { 12, "Cassette" }, { 10, "Seeded" } }));
+            AddIf(NWasFree(), "4A-shrine-bino");
+            AddIf(NWasFree(), "4A-oldtrail");
+            AddIf(NWasFree(), "4A-cliffface-bino");
+            AddIf(NWasFree(), enterChapter(Chapter.C9, 0));
+            AddIf(NWasFree(), "9A-start-singular-bino");
+            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("9A-powersource-keys-bino", "DTS", "Bino4DTS") }, () => GetAfterCompletion(new int[] { 18 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 15, "Key3DTS" } })()).ToArray());
+            AddIf(NWasFree(), enterChapter(Chapter.C3A, 2));
+            AddIf(NWasFree(), "3A-fromhugemess-enterpico", "RTM");
+            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("pico-berries", "Start", "Orb") }, GetAfterCompletion(new int[] { 4 }));
+            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("pico", "Orb", "Exit") }, GetAfterCompletion(new int[] { 22 }));
+            AddIf(NWasFree(), enterChapter(Chapter.C7A, 0));
+            AddIf(NWasFree(), "7A-0m-fast1");
+            AddIf(NWasFree(), "7A-500m-bino-fast3");
+            AddIf(NWasFree(), "7A-1000m-fast3");
+            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("7A-1500m-arb-1up-2up-3up", "Start", "ARB") }, GetAfterCompletion(new int[] { 9 }));
+            AddIf(NWasFree(), enterChapter(Chapter.C2A, 1));
+            AddIf(NWasFree(), "2A-start-fast5", "Start", "lvl_3x");
+            AddIf(NWasFree(), enterChapter(Chapter.C1A, 2));
+            AddIf(NWasFree(), "1A-crossing-arb-1up", "RTM", "lvl_6z (1)");
+            AddIf(NWasFree(), enterChapter(Chapter.C1A, 3));
+            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("1A-chasm-cassette-fast2-nocollect", "RTM", "Cassette") }, GetAfterCompletion(new int[] { 23 }));
             AddIf(NWasFree(), enterChapter(Chapter.C3B, 0));
-            AddIf(NWasFree(), "3B", GetAfterCompletion(new int[] { 9 }));
-            Add(enterChapter(Chapter.C5A, 2));
-            Add("5A-depths-grabless", "RTM", GetAfterCompletion(new int[] { 3 }));
-            Add("5A-unraveling");
-            Add("5A-search-keys", "Start", "Key3", GetAfterCompletion(new int[] { 17 }));
-            Add(enterChapter(Chapter.C8A, 0));
-            Add("8A-start-intothecore");
-            Add("8A-hotandcold");
-            Add("8A-heartofthemountain-heart", GetAfterCompletion(new int[] { 18, 15 }));
-            Add(enterChapter(Chapter.C4B, 0));
-            Add("4B");
-            Add(enterChapter(Chapter.C1B, 0));
-            Add("1B", GetAfterCompletion(new int[] { 2 }));
-            Add(enterChapter(Chapter.C9, 0));
-            Add("9A-start-singular");
-            Add("9A-powersource-keys", "DTS", "Key3DTS", GetAfterCompletion(new int[] { 1 }));
-            Add(enterChapter(Chapter.C7A, 4));
-            Add("7A-1500m", "RTM");
-            Add("7A-2000m-gem");
-            Add("7A-2500m-gem", "Start", "Gem", GetAfterCompletion(new int[] { 11 }));
-            Add(enterChapter(Chapter.C1A, 2));
-            Add("1A-crossing-dashless", "RTM", GetAfterCompletion(new int[] { 7 }));
-            Add(enterChapter(Chapter.C3A, 2));
-            Add("3A-fromhugemess-enterpico", "RTM");
-            Add("pico-berries", "Start", "5Berries");
-            Add(leavepico, new TickAttempt[] { new TickAttempt(0, new Objective("Obj 21", 16)) });
-            Add(rtm);
+            AddIf(NWasFree(), "3B-bino", GetAfterCompletion(new int[] { 2 }));
+            AddIf(NWasFree(), enterChapter(Chapter.C1B, 0));
+            AddIf(NWasFree(), "1B-bino", GetAfterLabel(new Dictionary<int, string> { { 11, "Bino2" } }));
+            AddIf(NWasFree(), enterChapter(Chapter.C8A, 0));
+            AddIf(NWasFree(), "8A-start-intothecore");
+            AddIf(NWasFree(), "8A-hotandcold");
+            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("8A-heartofthemountain-heart-arb", "Start", "ARB") }, GetAfterCompletion(new int[] { 0 }));
+            AddIf(NWasFree(), enterChapter(Chapter.C5A, 0));
+            AddIf(NWasFree(), "5A-start-arb");
+            AddIf(NWasFree(), "5A-depths-heart-arb-winged-seeded", GetAfterLabel(new Dictionary<int, string> { { 7, "Heart" }, { 13, "Heart" } }));
+            AddIf(NWasFree(), "5A-unravelling-seekerstuns-15-arb", GetAfterCompletion(new int[] { 6 }));
+            AddIf(NWasFree(), "5A-search-grabless-arb", GetAfterCompletion(new int[] { 17 }));
 
             gamestate = new GameState();
         }
@@ -508,6 +498,8 @@ namespace Celeste.Mod.BingoTasPlayer {
                         break;
                     case "3A":
                     case "3B":
+                    case "pi":
+                    case "le":
                         currentchapter = 3;
                         break;
                     case "4A":
@@ -548,8 +540,9 @@ namespace Celeste.Mod.BingoTasPlayer {
 
                     unlocked = unlockedChapters().ToList();
                     unlocked.AddRange(skippableChapters());
+                    if (skippableChapters().Contains(6) && goalchapter == 7) unlocked.Add(7);
                     unlocked.Sort();
-                    if (skippableChapters().Contains(goalchapter)) {
+                    if (skippableChapters().Contains(goalchapter) || (skippableChapters().Contains(6) && goalchapter == 7)) {
                         needsskip = true;
                     }
                     if (!unlocked.Contains(goalchapter)) {
@@ -585,6 +578,7 @@ namespace Celeste.Mod.BingoTasPlayer {
 
                 int currentchapterindex = unlocked.IndexOf(currentchapter);
                 int goalchapterindex = unlocked.IndexOf(goalchapter);
+                if ((skippableChapters().Contains(6) && goalchapter == 7)) goalchapterindex--;
                 Logger.Warn("bingoAi", "Moving from Chapter " + currentchapterindex + " to " + goalchapterindex);
                 if (currentchapterindex < goalchapterindex) {
                     ret.Add(new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "NRight.tas", "NRight", (goalchapterindex - currentchapterindex) + "Right", ""));
@@ -597,9 +591,12 @@ namespace Celeste.Mod.BingoTasPlayer {
                     // Maybe this doesn't work with Summit and Reflection, but I'll fix that once it becomes a problem :)
                     ret.Add(skipchapter);
                 }
+                if ((skippableChapters().Contains(6) && goalchapter == 7)) {
+                    ret.Add(Right);
+                }
 
-                // 3. Step: enter
-                if (chapter.A) {
+                    // 3. Step: enter
+                    if (chapter.A) {
                     switch (Cp) {
                         case 0:
                             if (goalchapter == 7) ret.Add(entersummit);
