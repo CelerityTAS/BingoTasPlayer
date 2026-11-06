@@ -102,7 +102,7 @@ public class BingoTasPlayerModule : EverestModule {
             texttowrite += "Read, " + r.path + (r.startlabel == "" ? "" : ", ") + r.startlabel + ((r.startlabel == "" || r.endlabel == "") ? "" : (", " + r.endlabel)) + "\n";
         }
         File.WriteAllText(TASFilePath, texttowrite);
-        filehasplayfix = route.FilePath.hasJump && route.FilePath.startlabel!="Start"&&route.FilePath.endlabel!="";
+        filehasplayfix = route.FilePath.hasJump && route.FilePath.startlabel != "Start" && route.FilePath.endlabel != "";
         Manager.Controller.ReadFile(TASFilePath);
         Manager.Controller.NeedsReload = true;
         return true;
@@ -170,6 +170,11 @@ public class BingoTasPlayerModule : EverestModule {
     private static bool filehasplayfix = false;
     private static int playfixnumber = 0;
     private static int cummplayfixnumber = 0;
+    public static void resetplayfix () {
+        PlayedFiles.Clear();
+        cummplayfixnumber = Manager.Controller.CurrentFrameInTas;
+        Manager.Controller.NeedsReload = true;
+    }
     private static SortedDictionary<int, bool> results = new();
     private static MethodInfo rendermenu;
     private static List<Tuple<int, int>> menushoudopen = new();
@@ -184,129 +189,162 @@ public class BingoTasPlayerModule : EverestModule {
             rendermenu.Invoke(BingoClient.BingoClient.Instance, []);
         }
     }
+    private static bool Collecting = false;
+    private static DataCreator dc = new DataCreator();
+    private static int timer = -1;
     private static void On_Celeste_Update(On.Celeste.Celeste.orig_Update orig, Celeste self, GameTime gameTime) {
-        // Logic for Starting / resetting
-        if (Settings.StartBind.Pressed && !Manager.Running) {
-            router = new TASRouter();
-            if (!BingoClient.BingoClient.Instance.Connected) {
-                orig(self, gameTime);
-            } else {
-                string[] objnamearr = GetBoard();
-                Objective[] objarr = new Objective[objnamearr.Length];
-                for (int i = 0; i < objnamearr.Length; i++) {
-
-                    objarr[i] = new Objective(objnamearr[i], i);
-                }
-                router.SetBoard(objarr);
+        if (Collecting) {
+            if (Settings.StartBind.Pressed && !Manager.Running) {
+                RouteChange? rc = dc.nextTAS();
+                Manager.Controller.FilePath = Path.Combine(Everest.PathEverest, "GMBingoPlayer", rc.Value.FilePath.path);
+                Manager.EnableRun();
             }
-
-            lastTASOffset = 0;
-            completedTicks = false;
-            results.Clear();
-            PlayedFiles.Clear();
-            StartTas();
-            filehasplayfix = false;
-        }
-        // Logic for "Route has Ticks it needs to do"
-        if (route.TickAttempts != null && !completedTicks) {
-            Objective[] objectives = new Objective[route.TickAttempts.Length];
-
-            for (int i = 0; i < route.TickAttempts.Length; i++) {
-                TickAttempt v = route.TickAttempts[i];
-                if (frameInTAS > v.Delay && !results.ContainsKey(i)) {
-                    Logger.Info("bingoai", "Ticking: " + v.Objective);
-                    results[i] = TryTick(v.Objective.index);
-                }
-            }
-            if (results.Count == route.TickAttempts.Length && !completedTicks) {
-                Logger.Info("bingoai", "All ticks returned");
-                completedTicks = true;
-                RouteChange? r = router.TickAttemptResult(objectives, results.Values.ToArray());
-                if (r != null) {
-                    route = r.Value;
-                    ChangeTas(r.Value);
-                }
-            }
-        }
-
-
-
-        // Logic for the board having changed
-        if (BingoClient.BingoClient.Instance.Connected && HasBoardChanged() && Manager.Running) {
-            Logger.Info("bingoai", "Board Changed");
-            var board = BingoClient.BingoClient.Instance.GetBoard();
-            if (recentBoard == null) recentBoard = new string[board.Count];
-            List<Objective> changes = new();
-            for (int i = 0; i < board.Count; i++) {
-                if (board[i].colors != recentBoard[i]) {
-                    changes.Add(new(board[i].name, i));
-                }
-                recentBoard[i] = board[i].colors;
-            }
-            if (changes.Count < board.Count) {
-                RouteChange? r = router.OnTickevent(changes.ToArray());
-                if (r != null) {
-                    route = r.Value;
-                    ChangeTas(r.Value);
-                }
-            }
-        }
-        if (changedtas > 1) {
-            route.TickAttempts = router.GetTickAttempts();
-            if (route.TickAttempts != null) {
-                foreach (var t in route.TickAttempts) {
-                    menushoudopen.Add(new(t.Delay - 30, t.Delay + 60));
-                }
-            }
-            changedtas = 0;
-
-            // implement the getting of relevant time here, since the TAS tools will have updated to be in the right file
-            if (filehasplayfix) {
-                KeyValuePair<int, List<Comment>> p = Manager.Controller.Comments.First(p => {
-                    return p.Key > Manager.Controller.CurrentFrameInTas && p.Value.Any(com => com.Text == route.FilePath.endlabel && Path.GetFullPath(com.FilePath).SequenceEqual(Path.GetFullPath("./GMBingoPlayer/" + route.FilePath.path)));
-                });
-                playfixnumber = p.Value.Last().Frame - BingoTasPlayerModule.lastTASOffset;
-            } else {
-                playfixnumber = 0;
-            }
-        }
-        if (changedtas == 1) changedtas++;
-
-        if (playfixnumber != 0 && playfixnumber <= frameInTAS) {
-            // This is all the frames that are not supposed to happen:
-            // we want to reset the tas file to no longer have the RTM problem
-            foreach (var ta in route.TickAttempts) {
-                if (ta.Delay >= playfixnumber-1) {
-                    TryTick(ta.Objective.index);
-                }
-            }
-            PlayedFiles.Clear();
-            cummplayfixnumber = Manager.Controller.CurrentFrameInTas;
-            Manager.Controller.NeedsReload = true;
-        }
-
-        // Logic for completed Files
-        // Might want to restart the tas to deal with in checkpoint stops
-        if ((!Manager.Controller.CanPlayback && PlayedFiles.Count > 0 )|| (playfixnumber != 0 && playfixnumber <= frameInTAS)) {
-
-            //List<Tuple<int, int>> shouldremain = menushoudopen.FindAll(t => t.Item2 - frameInTAS > 0).Select(t => new Tuple<int, int>(0, t.Item2 - frameInTAS)).ToList();
-            lastTASOffset = Manager.Controller.CurrentFrameInTas + 1;
-            RouteChange? newroute = router.OnTasCompleted();
-
-            if (newroute != null) {
-                changedtas = 1;
-               
-                menushoudopen.Clear();
-                //Logger.Warn("bingoai", "" + shouldremain.Count + " Objectives remain to be seen");
-                //menushoudopen.AddRange(shouldremain);
-
-                Logger.Info("bingoai", newroute.Value.FilePath.ToString());
-                NextTas(newroute.Value);
-                results.Clear();
-                completedTicks = false;
-                route = newroute.Value;
-            } else {
+            if (!Manager.Controller.CanPlayback && Manager.Running) {
                 Manager.DisableRun();
+                timer = 287;
+            }
+            if (timer > 0) timer--;
+            if (timer == 0) {
+                timer = -1;
+                RouteChange? rc = dc.nextTAS();
+                if (rc == null) {
+                    orig(self, gameTime);
+                    return;
+                }
+                Manager.Controller.FilePath = Path.Combine(Everest.PathEverest, "GMBingoPlayer", rc.Value.FilePath.path);
+                Manager.EnableRunLater();
+            }
+
+        } else {
+            // Logic for Starting / resetting
+            if (Settings.StartBind.Pressed && !Manager.Running) {
+                router = new TASRouter();
+                if (!BingoClient.BingoClient.Instance.Connected) {
+                    orig(self, gameTime);
+                } else {
+                    string[] objnamearr = GetBoard();
+                    Objective[] objarr = new Objective[objnamearr.Length];
+                    for (int i = 0; i < objnamearr.Length; i++) {
+
+                        objarr[i] = new Objective(objnamearr[i], i);
+                    }
+                    router.SetBoard(objarr);
+                }
+
+                lastTASOffset = 0;
+                completedTicks = false;
+                results.Clear();
+                PlayedFiles.Clear();
+                StartTas();
+                filehasplayfix = false;
+            }
+            // Logic for "Route has Ticks it needs to do"
+            if (route.TickAttempts != null && !completedTicks) {
+                Objective[] objectives = new Objective[route.TickAttempts.Length];
+
+                for (int i = 0; i < route.TickAttempts.Length; i++) {
+                    TickAttempt v = route.TickAttempts[i];
+                    if (frameInTAS > v.Delay && !results.ContainsKey(i)) {
+                        Logger.Info("bingoai", "Ticking: " + v.Objective);
+                        results[i] = TryTick(v.Objective.index);
+                    }
+                }
+                if (results.Count == route.TickAttempts.Length && !completedTicks) {
+                    Logger.Info("bingoai", "All ticks returned");
+                    completedTicks = true;
+                    RouteChange? r = router.TickAttemptResult(objectives, results.Values.ToArray());
+                    if (r != null) {
+                        route = r.Value;
+                        ChangeTas(r.Value);
+                    }
+                }
+            }
+
+
+
+            // Logic for the board having changed
+            if (BingoClient.BingoClient.Instance.Connected && HasBoardChanged() && Manager.Running) {
+                Logger.Info("bingoai", "Board Changed");
+                var board = BingoClient.BingoClient.Instance.GetBoard();
+                if (recentBoard == null) recentBoard = new string[board.Count];
+                List<Objective> changes = new();
+                for (int i = 0; i < board.Count; i++) {
+                    if (board[i].colors != recentBoard[i]) {
+                        changes.Add(new(board[i].name, i));
+                    }
+                    recentBoard[i] = board[i].colors;
+                }
+                if (changes.Count < board.Count) {
+                    RouteChange? r = router.OnTickevent(changes.ToArray());
+                    if (r != null) {
+                        route = r.Value;
+                        ChangeTas(r.Value);
+                    }
+                }
+            }
+            if (changedtas > 1) {
+                route.TickAttempts = router.GetTickAttempts();
+                if (route.TickAttempts != null) {
+                    foreach (var t in route.TickAttempts) {
+                        menushoudopen.Add(new(t.Delay - 30, t.Delay + 60));
+                    }
+                }
+                changedtas = 0;
+
+                // implement the getting of relevant time here, since the TAS tools will have updated to be in the right file
+                if (filehasplayfix) {
+                    KeyValuePair<int, List<Comment>> p = Manager.Controller.Comments.First(p => {
+                        return p.Key > Manager.Controller.CurrentFrameInTas && p.Value.Any(com => com.Text == route.FilePath.endlabel && Path.GetFullPath(com.FilePath).SequenceEqual(Path.GetFullPath("./GMBingoPlayer/" + route.FilePath.path)));
+                    });
+                    playfixnumber = p.Value.Last().Frame - BingoTasPlayerModule.lastTASOffset;
+                } else {
+                    playfixnumber = 0;
+                }
+            }
+            if (changedtas == 1) changedtas++;
+
+            if (playfixnumber != 0 && playfixnumber <= frameInTAS) {
+                // This is all the frames that are not supposed to happen:
+                // we want to reset the tas file to no longer have the RTM problem
+                if (route.TickAttempts != null) {
+                    foreach (var ta in route.TickAttempts) {
+                        if (ta.Delay >= playfixnumber - 1) {
+                            TryTick(ta.Objective.index);
+                        }
+                    }
+                }
+                resetplayfix();
+            }
+
+            // Logic for completed Files
+            // Might want to restart the tas to deal with in checkpoint stops
+            if ((!Manager.Controller.CanPlayback && PlayedFiles.Count > 0) || (playfixnumber != 0 && playfixnumber <= frameInTAS)) {
+
+                //List<Tuple<int, int>> shouldremain = menushoudopen.FindAll(t => t.Item2 - frameInTAS > 0).Select(t => new Tuple<int, int>(0, t.Item2 - frameInTAS)).ToList();
+                lastTASOffset = Manager.Controller.CurrentFrameInTas + 1;
+                RouteChange? newroute = router.OnTasCompleted();
+
+                if (PlayedFiles.Count > 5) {
+                    PlayedFiles.Clear();
+                    cummplayfixnumber = Manager.Controller.CurrentFrameInTas;
+                    Manager.Controller.NeedsReload = true;
+                }
+
+                if (newroute != null) {
+                    changedtas = 1;
+
+                    menushoudopen.Clear();
+                    //Logger.Warn("bingoai", "" + shouldremain.Count + " Objectives remain to be seen");
+                    //menushoudopen.AddRange(shouldremain);
+
+                    Logger.Info("bingoai", newroute.Value.FilePath.ToString());
+                    NextTas(newroute.Value);
+                    results.Clear();
+                    completedTicks = false;
+                    route = newroute.Value;
+                } else {
+                    Manager.DisableRun();
+                }
             }
         }
 

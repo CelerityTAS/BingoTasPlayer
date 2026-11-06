@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
+using static Celeste.Mod.BingoTasPlayer.TASRouter;
 
 namespace Celeste.Mod.BingoTasPlayer {
     internal class TASRoutes {
@@ -37,57 +38,350 @@ namespace Celeste.Mod.BingoTasPlayer {
         static TASFileInfo Right = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "Right.tas", "Right", "", "");
         static TASFileInfo skipchapter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "SkipChapter.tas", "SkipChapter", "", "");
         static TASFileInfo restartchapter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RestartChapter.tas", "RestartChapter", "", "");
-        /*
-             * 2 bino in 4 and 10 binos: 5 in 7A, 2 in 4A, 2 in 7B, 2 bino in 2B or 2 bino in 1B
-             * berries: 20 in 5A, 15 in 4A, 15 in 7A
-             * 
-             * seeded in: 4A and 5A
-             * winged: 1A start chasm, 3A start+mess, 4A oltrail, 5A depths, 7A 0m (or 2A awake instead of mess)
-             * 
-             * B sides: 1B, 2B, 5B
-             * blue hearts: 5A, 4A, 1A
-             * theo cutscenes: 1A, 2A or 5A
-             * 
-             * 1A
-             * start dashless winged
-             * crossing theo
-             * crossing heart
-             * chasm cassette winged
-             * 
-             * 2A
-             * start cassette
-             * intervention jumpless
-             * 
-             * 3A skip
-             * start
-             * hugemess pico berries complete
-             * 
-             * 4A
-             * start grabless cassette bino seeded
-             * shrine
-             * oldtrail arb
-             * cliffface arb bino
-             * 
-             * 5A
-             * start
-             * depths heart cassette winged seeded
-             * unraveling
-             * search arb
-             * 
-             * 7A
-             * 0m gem
-             * 500m gem 3bino
-             * 1000m 2bino
-             * 1500m cassette
-             * 
-             * 7B
-             * 2k
-             * 
-             * 8A
-             * itc berry
-             * 
+
+        #region Coop Blackout
+        /* https://celestebingo.rhelmot.io/room/ZeiDxaEbTFmaIPCEtlyN2Q?password=bingy
+             * Coop Blackout 2 TASes
+             * Seed 921362, Coop Blackout Gen
              * */
-        public static RouteChange[] blitzroute = [
+        // This is the Berry A-side one:
+        /*
+         * 10 in 1A
+         * 2 winged, 1A and mess
+         * 35 Berries
+         * 1A, 2A, 3A, 4A, 7A
+         * 1A:
+         * 10 berries
+         * 1UP
+         * winged 1+
+         * theo, probably at the end
+         * 
+         * 2A grabless
+         * 
+         * 3A 
+         * pico old site
+         * btc heart
+         * 15 oshiro stuns
+         * 
+         * 4A
+         * grabless
+         * 
+         * 7A
+         * 0 and 500m gem
+         * 2k arb
+         */
+        //71258 without grabless lake 67932
+        //Add(enterChapter(Chapter.C1A));
+        //Add("1A-start-fast4-winged");
+        //Add("1A-crossing-1up", GetAfterCompletion(new int[] { 2 }));
+        //Add("1A-chasm");
+        //Add(enterChapter(Chapter.C2A));
+        //Add("2A-start-grabless");
+        //Add("2A-intervention-grabless");
+        //Add("2A-awake-grabless", "FromGrabless");
+        //Add(enterChapter(Chapter.C3A));
+        //Add("3A-start-fast6-winged-1up", GetAfterLabel(new Dictionary<int, string>() { { 11, "Winged" }, { 20, "1UP" } }));
+        //Add("3A-fromhugemess-enterpico");
+        //Add("pico", "Start", "OldSite");
+        //Add(leavepico, new TickAttempt[] { new TickAttempt(0, new Objective("Pico", 18)) });
+        //Add(rtm);
+        //Add(entercp2);
+        //Add("3A-hugemess-btc-heart", "RTM", "", GetAfterLabel(new Dictionary<int, string>() { { 15, "Order" }, { 22, "Heart" } }));
+        //Add("3A-shaft-theo-fast1");
+        //Add("3A-presidentialsuite-oshiro", "Start", "Oshiro5");
+        //Add(enterChapter(Chapter.C3A, 4));
+        //Add("3A-presidentialsuite-oshiro", "RTM", "", GetAfterCompletion(new int[] { 6, 19 }));
+        //Add(enterChapter(Chapter.C4A));
+        //Add("4A-start-grabless");
+        //Add("4A-shrine-grabless");
+        //Add("4A-oldtrail-grabless");
+        //Add("4A-cliffface-grabless", GetAfterCompletion(new int[] { 14 }));
+        //Add(enterChapter(Chapter.C7A));
+        //Add("7A-0m-gem-fast1");
+        //Add("7A-500m-gem-fast2", GetAfterLabel(new Dictionary<int, string>() { { 23, "Gem" } }));
+        //Add("7A-1000m-fast3", GetAfterCompletion(new int[] { 9 }));
+        //Add("7A-1500m-fast4");
+        //Add("7A-2000m-arb-winged-seeded");
+        //Add(enterChapter(Chapter.C1A, 2));
+        //Add("1A-crossing-theo", "RTM", "TheoEnd", GetAfterLabel(new Dictionary<int, string>() { { 13, "Theo" } }), GetAfterDelay(new Dictionary<int, int>() { { 17, 0 }, { 21, 0 } }));
+        //Add(enterChapter(Chapter.Journal));
+
+        // THis is Hearts One:
+        /*
+         * 1A heart cassette
+         * 1B 2 binos
+         * 
+         * 2A heart cassette
+         * 2B bino
+         * 
+         * 4A blue binos
+         * 
+         * 5A cassette bino key
+         * 5B
+         * 
+         * 6A grabless lake
+         * 
+         * 8A hot and cold arb heart cassette
+         */
+        //64669 or 67995 with grabless lake
+//        Add(enterChapter(Chapter.C1A));
+//        Add("1A-start");
+//        Add("1A-crossing-heart");
+//        Add("1A-chasm-cassette", "Start", "Cassette");
+//        Add(enterChapter(Chapter.C1B));
+//        Add("1B-bino");
+//        Add(enterChapter(Chapter.C2A));
+//        Add("2A-fromstart-heart");
+//        Add(enterChapter(Chapter.C2A, 1));
+//            Add("2A-start-cassette-bino", "Start", "Cassette");
+//        Add(enterChapter(Chapter.C2B));
+//        Add("2B-bino");
+//        Add(enterChapter(Chapter.C4A));
+//        Add("4A-start-cassette");
+//        Add("4A-shrine-heart", GetAfterLabel(new Dictionary<int, string>() { { 4, "Heart" } }));
+//            Add("4A-oldtrail");
+//    Add("4A-cliffface");
+//    Add(enterChapter(Chapter.C5A));
+//    Add("5A-start");
+//    Add("5A-depths-cassette-key-bino", "Start", "Key", GetAfterLabel(new Dictionary<int, string>() { { 12, "Cassette" }, { 24, "Bino" } }), GetAfterCompletion(new int[] { 5 }));
+//Add(enterChapter(Chapter.C5B));
+//Add("5B", GetAfterCompletion(new int[] { 0 }));
+//Add(enterChapter(Chapter.C6A));
+//Add("6A-start");
+//Add("6A-lake-grabless", GetAfterCompletion(new int[] { 3 }));
+//Add(enterChapter(Chapter.C8A));
+//Add("8A-start-intothecore");
+//Add("8A-hotandcold-arb", GetAfterLabel(new Dictionary<int, string>() { { 10, "ARB" } }));
+//Add("8A-heartofthemountain-heart", GetAfterCompletion(new int[] { 1, 8 }));
+//Add(enterChapter(Chapter.C9));
+//Add("9A-start-singular");
+//Add("9A-powersource-keys-bino", "DTS", "Key3DTS", GetAfterCompletion(new int[] { 7, 16 }));
+//Add(enterChapter(Chapter.Journal));
+        #endregion
+
+
+#region 3Line
+// Seed: 663335 | Varient: Non-Lockout | Optimized: 3-Line | https://celestebingo.rhelmot.io/room/lp6BivJ3RBiSsmjPYgOSyw?password=d
+/*
+ * Possible 3Lines that need to be tested:
+ * 1)
+ * 
+ * row1, row3 and colD plays till 3000m
+ * 
+ * row1 colE diag pos plays till 2k
+ * 4winged
+ * cbt
+ * 3theo
+ * 
+ * 
+ * row4, colB and diag neg (A1 -> E5) plays till 1km
+ * 4winged + 2w in 2 1A and 3A winged
+ * cbt
+ * binos 1k
+ * 2A2B 1A, 3A, 3B, 1B
+ * 3B
+ * 7 Hearts 3B 1B 3A 4A 2A 1A 2B/6A
+ * Grabless 1A
+ * core switch
+ * 10 in 4
+ * 4ASides 1A, 2A, 3A, 4A
+ * grabless suite
+ * 
+ * */
+
+//3) 17:48 something
+/*
+Add(enterChapter(Chapter.C1A));
+Add("1A-start-grabless-winged");
+Add("1A-crossing-grabless-heart-fast1", GetAfterLabel(new Dictionary<int, string> { { 14, "Heart"} }));
+    Add("1A-chasm-grabless-winged", GetAfterCompletion(new int[] {16}));
+    Add(enterChapter(Chapter.C1A, 3));
+    Add("1A-chasm-cassette", "RTM", "Cassette");
+Add(enterChapter(Chapter.C1B));
+Add("1B");
+Add(enterChapter(Chapter.C2A));
+Add("2A-fromstart-heart", "Start", "Heart");
+Add(restartchapter);
+Add("2A-start-fast5-seeded");
+Add("2A-intervention-fast5");
+Add("2A-awake");
+Add(enterChapter(Chapter.C3A));
+Add("3A-start-fast3-winged");
+Add("3A-hugemess-cbt-heart-fast5-winged", GetAfterLabel(new Dictionary<int, string> { { 0, "Winged" }, { 17, "Winged"} }), GetAfterCompletion(new int[] {1}));
+    Add("3A-shaft-cassette-fast1");
+Add("3A-presidentialsuite-grabless-fast1", GetAfterCompletion(new int[] {24}));
+    Add(enterChapter(Chapter.C3B));
+Add("3B", GetAfterCompletion(new int[] {12, 11}));
+    Add(enterChapter(Chapter.C4A));
+Add("4A-start-fast2");
+Add("4A-shrine-heart-fast2");
+Add("4A-oldtrail-fast2");
+Add("4A-cliffface-fast4", GetAfterCompletion(new int[] {21}));
+    Add(enterChapter(Chapter.C6A));
+Add("6A-start");
+Add("6A-lake");
+Add("6A-fromhollows-heart", GetAfterCompletion(new int[] {15}));
+    Add(enterChapter(Chapter.C7A));
+Add("7A-0m-fast3");
+Add("7A-500m-fast3");
+Add("7A-1000m-bino-fast5", "Start", "Bino4", GetAfterCompletion(new int[] {19, 6}));
+    Add(enterChapter(Chapter.C8A));
+Add("8A-start-intothecore-switch", "Start", "Switch", GetAfterCompletion(new int[] {18}));
+    Add(enterChapter(Chapter.Journal));
+*/
+
+
+//2) these still need 10 in 4 and are only ~30s faster
+//Add(enterChapter(Chapter.C1A));
+//Add("1A-start-winged");
+//Add("1A-crossing-heart-theo", "Start", GetAfterCompletion(new int[] { 14 }));
+//Add("1A-chasm");
+//Add(enterChapter(Chapter.C2A));
+//Add("2A-start");
+//Add("2A-intervention");
+//Add("2A-awake-theo-aftercrossing");
+//Add(enterChapter(Chapter.C3A));
+//Add("3A-start-winged");
+//Add("3A-hugemess-cbt-winged", GetAfterCompletion(new int[] { 1 }));
+//Add("3A-shaft-cassette-theo", "Start", GetAfterLabel(new Dictionary<int, string> { { 2, "Theo"} }));
+//Add("3A-presidentialsuite-grabless", GetAfterCompletion(new int[] {24}));
+//Add(enterChapter(Chapter.C3B, 0));
+//Add("3B", GetAfterCompletion(new int[] { 12 }));
+//Add(enterChapter(Chapter.C5A));
+//Add("5A-start");
+//Add("5A-depths-cassette", "Start", "Cassette", GetAfterCompletion(new int[] { 10 }));
+//Add(enterChapter(Chapter.C5B));
+//Add("5B-seekerkill3", GetAfterCompletion(new int[] { 9, 11 }));
+//Add(enterChapter(Chapter.C7A));
+//Add("7A-0m-gem");
+//Add("7A-500m-gem");
+//Add("7A-1000m-gem");
+//Add("7A-1500m-gem");
+//Add("7A-2000m-gem-winged", "Start", GetAfterCompletion(new int[] { 4 }));
+//Add("7A-2500m-arb");
+//Add(enterChapter(Chapter.Journal));
+
+//18:13.457
+//Add(enterChapter(Chapter.C1A));
+//Add("1A-start-grabless-winged");
+//Add("1A-crossing-heart-theo", "Start", "Heart", GetAfterCompletion(new int[] {14}));
+//Add(enterChapter(Chapter.C1A, 2));
+//Add("1A-crossing-grabless","RTM");
+//Add("1A-chasm-cassette", "Start", "Cassette");
+//Add(enterChapter(Chapter.C1A, 3));
+//Add("1A-chasm-grabless", "RTM", GetAfterCompletion(new int[] {16}));
+//Add(enterChapter(Chapter.C2A));
+//Add("2A-start");
+//Add("2A-intervention");
+//Add("2A-awake-theo");
+//Add(enterChapter(Chapter.C3A));
+//Add("3A-start-winged");
+//Add("3A-hugemess-cbt-winged", GetAfterCompletion(new int[] { 1 }));
+//Add("3A-shaft-cassette-theo", "Start", GetAfterLabel(new Dictionary<int, string> { { 2, "Theo" } }));
+//Add("3A-presidentialsuite-grabless");
+//Add(enterChapter(Chapter.C3B, 0));
+//Add("3B", GetAfterCompletion(new int[] { 12 }));
+//Add(enterChapter(Chapter.C4A));
+//Add("4A-start");
+//Add("4A-shrine-heart-arb", GetAfterCompletion(new int[] {20}));
+//Add(enterChapter(Chapter.C5A));
+//Add("5A-start");
+//Add("5A-depths-cassette", "Start", "Cassette", GetAfterCompletion(new int[] { 10 }));
+//Add(enterChapter(Chapter.C5B));
+//Add("5B-seekerkill3", GetAfterLabel(new Dictionary<int, string> { { 3, "SeekerKill2" } }), GetAfterCompletion(new int[] { 9, 11 }));
+//Add(enterChapter(Chapter.C7A));
+//Add("7A-0m-gem");
+//Add("7A-500m-gem");
+//Add("7A-1000m-gem");
+//Add("7A-1500m-gem-cassette", GetAfterLabel(new Dictionary<int, string> { { 8, "Cassette" } }));
+//Add("7A-2000m-gem","Start", "Gem", GetAfterCompletion(new int[] {4}));
+//Add(enterChapter(Chapter.Journal));
+
+
+// 1) 18:47.287
+//Add(enterChapter(Chapter.C1A, 0));
+//Add("1A-start-winged");
+//Add("1A-crossing-heart-theo", GetAfterLabel(new Dictionary<int, string> { { 23, "Theo"}, { 14, "Heart"} }));
+//Add("1A-chasm-cassette");
+//Add(enterChapter(Chapter.C2A, 0));
+//Add("2A-start");
+//Add("2A-intervention");
+//Add("2A-awake-theo");
+//Add(enterChapter(Chapter.C3A));
+//Add("3A-start-winged");
+//Add("3A-hugemess-cbt-heart-winged", GetAfterCompletion(new int[] { 1 }));
+//Add("3A-shaft-cassette-theo", "Start", "Cassette", GetAfterLabel(new Dictionary<int, string> { { 2, "Theo" } }));
+//Add(enterChapter(Chapter.C3B, 0));
+//Add("3B", GetAfterCompletion(new int[] { 12 }));
+//Add(enterChapter(Chapter.C5A));
+//Add("5A-start");
+//Add("5A-depths-cassette", "Start", "Cassette", GetAfterCompletion(new int[] { 10 }));
+//Add(enterChapter(Chapter.C5B));
+//Add("5B-seekerkill3", GetAfterLabel(new Dictionary<int, string> { { 3, "SeekerKill2" } }), GetAfterCompletion(new int[] { 9, 11 }));
+//Add(enterChapter(Chapter.C7A));
+//Add("7A-0m-gem");
+//Add("7A-500m-gem");
+//Add("7A-1000m-gem");
+//Add("7A-1500m-gem-cassette", GetAfterLabel(new Dictionary<int, string> { { 8, "Cassette" } }));
+//Add("7A-2000m-gem-winged", GetAfterLabel(new Dictionary<int, string> { { 4, "Gem" },{ 0, "Winged"} }));
+//Add("7A-2500m-arb");
+//Add(enterChapter(Chapter.C8A));
+//Add("8A-start-intothecore-switch", "Start", "Collect", GetAfterCompletion(new int[] { 18 }), GetAfterDelay(new Dictionary<int, int> { { 13, 0 } }));
+//Add(enterChapter(Chapter.Journal));
+#endregion
+
+
+/*
+     * 2 bino in 4 and 10 binos: 5 in 7A, 2 in 4A, 2 in 7B, 2 bino in 2B or 2 bino in 1B
+     * berries: 20 in 5A, 15 in 4A, 15 in 7A
+     * 
+     * seeded in: 4A and 5A
+     * winged: 1A start chasm, 3A start+mess, 4A oltrail, 5A depths, 7A 0m (or 2A awake instead of mess)
+     * 
+     * B sides: 1B, 2B, 5B
+     * blue hearts: 5A, 4A, 1A
+     * theo cutscenes: 1A, 2A or 5A
+     * 
+     * 1A
+     * start dashless winged
+     * crossing theo
+     * crossing heart
+     * chasm cassette winged
+     * 
+     * 2A
+     * start cassette
+     * intervention jumpless
+     * 
+     * 3A skip
+     * start
+     * hugemess pico berries complete
+     * 
+     * 4A
+     * start grabless cassette bino seeded
+     * shrine
+     * oldtrail arb
+     * cliffface arb bino
+     * 
+     * 5A
+     * start
+     * depths heart cassette winged seeded
+     * unraveling
+     * search arb
+     * 
+     * 7A
+     * 0m gem
+     * 500m gem 3bino
+     * 1000m 2bino
+     * 1500m cassette
+     * 
+     * 7B
+     * 2k
+     * 
+     * 8A
+     * itc berry
+     * 
+     * */
+public static RouteChange[] blitzroute = [
                 new (enter,null),
                 new(new TASObjectiveInfo("1A-start-dashless-winged"),null),
                 new(new TASObjectiveInfo("1A-crossing-theo"),new TickAttempt[] { new TickAttempt(0,new("dashless start",22))}),

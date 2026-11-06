@@ -132,65 +132,88 @@ namespace Celeste.Mod.BingoTasPlayer {
             // to see old routes (They will need to be fixed probably. ADD A FRAME OF RIGHT BEFORE SKIPCHAPTER)
             //Add(TASRoutes.routethriteen);
 
+            //https://celestebingo.rhelmot.io/room/9gjnOIaaRReYLGFDw9q6yQ?password=Coop
+            //Fixed Board: [{"name": "CO-OP TOTAL\n18 Keys"}, {"name": "Celestial Resort Blue Heart"}, {"name": "CO-OP TOTAL\n20 Berries in 2A"}, {"name": "Visit the Bird's Nest in Epilogue"}, {"name": "CO-OP TOTAL\n30 Berries in 3A"}, {"name": "All Berries in 1500M (8)"}, {"name": "Winged Golden Berry"}, {"name": "Blue and Red Heart in Mirror Temple"}, {"name": "Forsaken City B-Side"}, {"name": "Reach Gusty Canyon (4B Checkpoint)"}, {"name": "CO-OP TOTAL\n2 Hearts"}, {"name": "Jump on 10 Snowballs"}, {"name": "CO-OP TOTAL\n150 Berries"}, {"name": "Talk to Theo in Search"}, {"name": "CO-OP TOTAL\n6 Gems in The Summit"}, {"name": "7 Winged Berries"}, {"name": "Grabless Power Source"}, {"name": "Talk to Theo in Awake"}, {"name": "Huge Mess:\nBooks ↑\nChest ↓\nTowel →"}, {"name": "2 Binoculars in 5 Chapters"}, {"name": "CO-OP TOTAL\nUse 10 Unique Binoculars"}, {"name": "10 Berries in 5 Chapters"}, {"name": "CO-OP TOTAL\nComplete 4 Unique B-Sides"}, {"name": "Reach Rock Bottom (6A/6B Checkpoint)"}, {"name": "CO-OP TOTAL\nComplete 4 Unique A-Sides"}]
+            // Progression: BananaSplit
+            Add(enterChapter(Chapter.C1A));
+            Add("1A-wingedgolden-2winged", GetAfterCompletion(new int[] { 6 }));
+            Add(enterChapter(Chapter.C1A, 2));
+            Add("1A-crossing-fast7-1up", "RTM");
+            Add(enterChapter(Chapter.C2A));
+            Add("2A-start-arb-seeded-1up-2up-3up-4up");
+            Add("2A-intervention-arb-1up-2up-3up");
+            Add("2A-awake-theo-arb-winged", GetAfterLabel(new Dictionary<int, string>() { { 17, "Theo" } }));
+            Add(enterChapter(Chapter.C3A));
+            Add("3A-start-arb-winged");
+            Add("3A-hugemess-bct-heart-arb-winged", GetAfterLabel(new Dictionary<int, string>() { { 1, "Heart" }, { 18, "Order" } }));
+            Add("3A-shaft-key-arb");
+            Add("3A-presidentialsuite-arb");
+            Add(enterChapter(Chapter.C5A));
+            Add("5A-start-fast8");
+            Add("5A-depths-key-arb-winged-seeded", GetAfterLabel(new Dictionary<int, string>() { { 15, "Winged" } }));
+            Add("5A-unraveling-arb");
+            Add("5A-search-keys", "Start", "Key3");
+            Add(enterChapter(Chapter.C6A));
+            Add("6A-start");
+            Add("6A-lake");
+            Add("6A-fromhollows-cassette", "Start", "Cassette");
+            Add(enterChapter(Chapter.C6B));
+            Add("6B", "Start", "Rock Bottom", GetAfterCompletion(new int[] { 23 }));
+            Add(enterChapter(Chapter.C7A));
+            Add("7A-0m-gem-fast3");
+            Add("7A-500m-gem-fast4-winged");
+            Add("7A-1000m-gem-fast3", GetAfterCompletion(new int[] { 21 }));
+            Add("7A-1500m-gem-arb-winged-1up-2up-3up");
+            Add("7A-2000m-gem", "Start", "Gem", GetAfterLabel(new Dictionary<int, string>() { { 5, "1500mARBCollect" } }));
+            Add(enterChapter(Chapter.C7A, 5));
+            Add("7A-2000m-snowball10", "RTM", "Ball10", GetAfterCompletion(new int[] { 11 }));
+            Add(enterChapter(Chapter.C5A, 4));
+            Add("5A-search-theo", "RTM", "TheoEnd", GetAfterLabel(new Dictionary<int, string>() { { 13, "Theo" } }));
+            Add(enterChapter(Chapter.Journal));
 
-            //https://celestebingo.rhelmot.io/room/wJt_qo8ZRTO51BS4WkQivA?password=s
-            // Seed: 306566 | Varient: Lockout | Optimized: Lockout | https://celestebingo.rhelmot.io/room/BtWtPRz0TWGfxFqg0pepqA?password=sa
-            Add(enterChapter(Chapter.C1A, 0));
-            Add("1A-start-arb-winged-1up", GetAfterLabel(new Dictionary<int, string> { { 21, "1UP" } }));
-            Add("1A-crossing-heart-fast4-collect", GetAfterLabel(new Dictionary<int, string> { { 5, "Heart" } }));
-            Add("1A-chasm-progress2-winged");
-            Add(enterChapter(Chapter.C2A, 0));
-            Add("2A-start-seeded");
-            Add("2A-intervention-arb-1up-2up-3up", GetAfterCompletion(new int[] { 19 }));
-            Add("2A-awake-arb-winged");
-            AddIf(NFree(new int[] { 3 }, 1), enterChapter(Chapter.C3A, 0));
-            AddIf(NWasFree(), "3A-start-grabless-winged", GetAfterLabel(new Dictionary<int, string> { { 3, "Winged" } }));
-            AddIf(NWasFree(), "3A-hugemess-tbc-grabless-heart-fast5-winged");
-            AddIf(NWasFree(), "3A-shaft-grabless-cassette-diary-arb", GetAfterLabel(new Dictionary<int, string> { { 16, "Diary" }, { 24, "Diary" }, { 8, "Cassette" }, { 1, "Diary" } }));
-            AddIf(NWasFree(), "3A-presidentialsuite-grabless", GetAfterCompletion(new int[] { 14 }));
-            AddIf(NWasFree(), enterChapter(Chapter.C4A, 0));
-            AddIf(NWasFree(), "4A-start-cassette-bino-seeded", GetAfterLabel(new Dictionary<int, string> { { 12, "Cassette" }, { 10, "Seeded" } }));
-            AddIf(NWasFree(), "4A-shrine-bino");
-            AddIf(NWasFree(), "4A-oldtrail");
-            AddIf(NWasFree(), "4A-cliffface-bino");
-            AddIf(NWasFree(), enterChapter(Chapter.C9, 0));
-            AddIf(NWasFree(), "9A-start-singular-bino");
-            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("9A-powersource-keys-bino", "DTS", "Bino4DTS") }, () => GetAfterCompletion(new int[] { 18 })().Concat(GetAfterLabel(new Dictionary<int, string> { { 15, "Key3DTS" } })()).ToArray());
-            AddIf(NWasFree(), enterChapter(Chapter.C3A, 2));
-            AddIf(NWasFree(), "3A-fromhugemess-enterpico", "RTM");
-            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("pico-berries", "Start", "Orb") }, GetAfterCompletion(new int[] { 4 }));
-            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("pico", "Orb", "Exit") }, GetAfterCompletion(new int[] { 22 }));
-            AddIf(NWasFree(), enterChapter(Chapter.C7A, 0));
-            AddIf(NWasFree(), "7A-0m-fast1");
-            AddIf(NWasFree(), "7A-500m-bino-fast3");
-            AddIf(NWasFree(), "7A-1000m-fast3");
-            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("7A-1500m-arb-1up-2up-3up", "Start", "ARB") }, GetAfterCompletion(new int[] { 9 }));
-            AddIf(NWasFree(), enterChapter(Chapter.C2A, 1));
-            AddIf(NWasFree(), "2A-start-fast5", "Start", "lvl_3x");
-            AddIf(NWasFree(), enterChapter(Chapter.C1A, 2));
-            AddIf(NWasFree(), "1A-crossing-arb-1up", "RTM", "lvl_6z (1)");
-            AddIf(NWasFree(), enterChapter(Chapter.C1A, 3));
-            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("1A-chasm-cassette-fast2-nocollect", "RTM", "Cassette") }, GetAfterCompletion(new int[] { 23 }));
-            AddIf(NWasFree(), enterChapter(Chapter.C3B, 0));
-            AddIf(NWasFree(), "3B-bino", GetAfterCompletion(new int[] { 2 }));
-            AddIf(NWasFree(), enterChapter(Chapter.C1B, 0));
-            AddIf(NWasFree(), "1B-bino", GetAfterLabel(new Dictionary<int, string> { { 11, "Bino2" } }));
-            AddIf(NWasFree(), enterChapter(Chapter.C8A, 0));
-            AddIf(NWasFree(), "8A-start-intothecore");
-            AddIf(NWasFree(), "8A-hotandcold");
-            AddIf(NWasFree(), () => new TASFileInfo[] { new TASObjectiveInfo("8A-heartofthemountain-heart-arb", "Start", "ARB") }, GetAfterCompletion(new int[] { 0 }));
-            AddIf(NWasFree(), enterChapter(Chapter.C5A, 0));
-            AddIf(NWasFree(), "5A-start-arb");
-            AddIf(NWasFree(), "5A-depths-heart-arb-winged-seeded", GetAfterLabel(new Dictionary<int, string> { { 7, "Heart" }, { 13, "Heart" } }));
-            AddIf(NWasFree(), "5A-unravelling-seekerstuns-15-arb", GetAfterCompletion(new int[] { 6 }));
-            AddIf(NWasFree(), "5A-search-grabless-arb", GetAfterCompletion(new int[] { 17 }));
+            //Add(enterChapter(Chapter.C1A, 0));
+            //Add("1A-start-arb-winged");
+            //Add("1A-crossing-arb-1up");
+            //Add("1A-chasm-cassette", "Start", "Cassette");
+            //Add(enterChapter(Chapter.C1B, 0));
+            //Add("1B-bino");
+            //Add(enterChapter(Chapter.C2A, 0));
+            //Add("2A-start-cassette-arb-seeded-1up-2up-3up");
+            //Add(enterChapter(Chapter.C2B, 0));
+            //Add("2B-bino");
+            //Add(enterChapter(Chapter.C3A, 0));
+            //Add("3A-start-fast5-winged", "Start", "Winged");
+            //Add(enterChapter(Chapter.C4A, 0));
+            //Add("4A-start-cassette-fast6-seeded-1up", "Start", "Cassette");
+            //Add(enterChapter(Chapter.C4B, 0));
+            //Add("4B-2bino");
+            //Add(enterChapter(Chapter.C5A, 0));
+            //Add("5A-start-arb");
+            //Add("5A-depths-heart-cassette-arb-winged-seeded", "Start", "Heart");
+            //Add(enterChapter(Chapter.C5B, 0));
+            //Add("5B-2keys");
+            //Add(enterChapter(Chapter.C7A, 0));
+            //Add("7A-0m-gem-arb");
+            //Add("7A-500m-gem", "Start", "Gem");
+            //Add(enterChapter(Chapter.C9, 0));
+            //Add("9A-start-singular");
+            //Add("9A-powersource-grabless", "DTS");
+            //Add(enterChapter(Chapter.C9, 3));
+            //Add("9A-powersource-keys", "RTM", "Key2");
+            //Add(enterChapter(Chapter.C8A, 0));
+            //Add("8A-start-intothecore-arb");
+            //Add("8A-hotandcold-arb");
+            //Add("8A-heartofthemountain-heart-arb");
+            //Add(enterChapter(Chapter.E, 0));
+            //Add("Epilogue-Birdsnest", "Start", "Reach");
+
 
             gamestate = new GameState();
         }
         private static Func<TickAttempt[]> GetAfterCompletion(int[] indices) {
             return () => {
                 int delay = Manager.Controller.Inputs.Count - Manager.Controller.CurrentFrameInTas - 1;
-                TickAttempt[] ticks = indices.Select((i) => new TickAttempt(delay, getObjective(BingoTasPlayerModule.router, i))).ToArray();
+                TickAttempt[] ticks = indices.Select((i) => new TickAttempt(delay, getObjectiveSafe(BingoTasPlayerModule.router, i))).ToArray();
                 return ticks;
             };
         }
@@ -206,9 +229,12 @@ namespace Celeste.Mod.BingoTasPlayer {
                         return new Tuple<int, int>(v.Key, Manager.Controller.Inputs.Count - Manager.Controller.CurrentFrameInTas - 1);
                     }
                 }).ToList();
-                TickAttempt[] ticks = delays.Select(v => new TickAttempt(v.Item2, getObjective(BingoTasPlayerModule.router, v.Item1))).ToArray();
+                TickAttempt[] ticks = delays.Select(v => new TickAttempt(v.Item2, getObjectiveSafe(BingoTasPlayerModule.router, v.Item1))).ToArray();
                 return ticks;
             };
+        }
+        private static Func<TickAttempt[]> GetAfterDelay(Dictionary<int,int> indexafterdelay) {
+            return () => indexafterdelay.Select(v => new TickAttempt(v.Value, getObjectiveSafe(BingoTasPlayerModule.router, v.Key))).ToArray();
         }
 
         #region AddFunctions
@@ -324,8 +350,23 @@ namespace Celeste.Mod.BingoTasPlayer {
                 } else return null;
             }, ticks));
         }
+        private static void AddIf(Func<bool> Condition, string name, string start, Func<TickAttempt[]> ticks) {
+            route.Add(new RouteAction(() => {
+                if (Condition.Invoke()) {
+                    return new TASFileInfo[] { new TASObjectiveInfo(name, start) };
+                } else return null;
+            }, ticks));
+        }
+        private static void AddIf(Func<bool> Condition, string name, string start, string end, Func<TickAttempt[]> ticks) {
+            route.Add(new RouteAction(() => {
+                if (Condition.Invoke()) {
+                    return new TASFileInfo[] { new TASObjectiveInfo(name, start, end) };
+                } else return null;
+            }, ticks));
+        }
 
-
+        #endregion
+        #region ConditionalFunctions
         private static Func<bool> NFree(int[] slots, int n) {
             return () => {
                 WASFree = slots.Count((i) => !isTicked(i)) >= n;
@@ -336,7 +377,16 @@ namespace Celeste.Mod.BingoTasPlayer {
             return () => WASFree;
         }
         private static bool WASFree = true;
-
+        private static Func<bool> isOnBranch(List<int> branch) {
+            return () => branch.SequenceEqual(branches);
+        }
+        private static Func<TASFileInfo[]> setBranch(int i) {
+            return () => {
+                branches.Add(i);
+                return null;
+            };
+        }
+        private static List<int> branches = new List<int>();
         #endregion
 
         private static List<RouteAction> route = new();
@@ -348,15 +398,19 @@ namespace Celeste.Mod.BingoTasPlayer {
             //Testing
             if (changedRoute) {
                 changedRoute = false;
+                //route.Clear();
+                //Add(enterChapter(Chapter.Journal));
             }
 
 
             if (route.Count == 0) return null;
             RouteChange[] actions = route[0].Get();
-            while (actions == null) {
+            while (actions == null && route.Count > 1) {
+                Logger.Warn("bingoai", "Removed a routeaction that was null");
                 route.RemoveAt(0);
                 actions = route[0].Get();
             }
+            if (actions == null) return null;
             if (actions.Length > 1) {
                 route.InsertRange(1, actions.Select(v => new RouteAction(v.FilePath, v.TickAttempts)));
                 route.RemoveAt(0);
@@ -372,15 +426,21 @@ namespace Celeste.Mod.BingoTasPlayer {
         }
 
         public RouteChange? OnTickevent(Objective[] objectives) {
+            //if (BingoClient.BingoClient.Instance.IsLockout && BingoClient.BingoClient.Instance.Score().All(v => v.Item2 < 13)) {
+            //    return null;
+            //}
+            //if (!BingoClient.BingoClient.Instance.IsLockout && BingoClient.BingoClient.Instance.Score().All(v => v.Item2 < 25)) {
+            //    return null;
+            //}
             return null;
             changedRoute = true;
-            previous.FilePath.endlabel = "" + 0;
+            previous.FilePath.endlabel = NextComment();
             return previous;
         }
         public Objective[] board;
         public Objective[] getBoard() { return board; }
 
-        public static Objective getObjective(IBingoRouter router, int i) {
+        public static Objective getObjectiveSafe(IBingoRouter router, int i) {
             Objective[] board = router.getBoard();
             if (board == null) {
                 return new Objective("Objective " + i, i);
@@ -448,6 +508,7 @@ namespace Celeste.Mod.BingoTasPlayer {
             public static Chapter E = new Chapter(8, true, false, null, null);
             public static Chapter C8A = new Chapter(9, true, false, "heartofthemountain", null);
             public static Chapter C9 = new Chapter(10, true, false, "farewell", null);
+            public static Chapter Journal = new Chapter(0, false, false, "", null);
         }
         private Func<TASFileInfo[]> enterChapter(Chapter chapter, int Cp = 0) {
             return new Func<TASFileInfo[]>(() => {
@@ -479,6 +540,7 @@ namespace Celeste.Mod.BingoTasPlayer {
                 TASFileInfo entercorecp1 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterCoreCP1.tas", "EnterCoreCP1", "", "");
                 TASFileInfo enterB = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterBSide.tas", "EnterBSide", "", "");
                 TASFileInfo enterBcp1 = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterBSideCP1.tas", "EnterBSideCP1", "", "");
+                TASFileInfo enterJournal = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "EnterJournal.tas", "EnterJournal", "", "");
                 TASFileInfo skipchapter = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "SkipChapter.tas", "SkipChapter", "", "");
                 #endregion
                 List<TASFileInfo> ret = [];
@@ -563,21 +625,28 @@ namespace Celeste.Mod.BingoTasPlayer {
                     string[] leavecheckpoints = { "1A-chasm", "1A-wingedgolden", "2A-awake", "3A-presidentialsuite", "4A-cliffface", "5A-rescue", "resolution", "7A-3000m", "8A-heartofthemountain" };
                     string[] wakeupcheckpoints = { "2A-intervention", "5A-depths" };
                     if (rtmchapters.Any((c) => prev.FilePath.name.Contains(c))) ret.Add(rtmmenu);
+                    //else if (prev.FilePath.name.Contains("pico")) { ret.Add(rtm); }
                     else if (prev.FilePath.name == "start") { } else if (prev.FilePath.name.Contains("2A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("1A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("leavepico")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("6A-fromhollows")) { ret.Add(rtmmenu); } else if (wakeupcheckpoints.Any(v => prev.FilePath.name.Contains(v))) {
                         ret.Add(rtmwakeup);
                     } else if (leavecheckpoints.Any(cp => prev.FilePath.name.Contains(cp))) { ret.Add(leave); currentchapter++; } else if (prev.FilePath.name.Contains("7A")) { ret.Add(rtmsummitcollect); } else {
                         ret.Add(rtm);
                     }
                 } else {
-                    ret.Add(rtm);
+                    //if (prev.FilePath.name.Contains("pico")) { ret.Add(leavepico); ret.Add(rtm); }
+                    if (prev.FilePath.name.Contains("7A")) { ret.Add(rtmsummitcollect); }
+                    else ret.Add(rtm);
                 }
 
                 // 2. Step: move to right chapter
 
 
-
+                
                 int currentchapterindex = unlocked.IndexOf(currentchapter);
                 int goalchapterindex = unlocked.IndexOf(goalchapter);
+                if (chapter == Chapter.Journal) {
+                    currentchapterindex = goalchapterindex;
+                    Logger.Warn("bingoai", "This File had an InputCount: " + TAS.Manager.Controller.Inputs.Count);
+                }
                 if ((skippableChapters().Contains(6) && goalchapter == 7)) goalchapterindex--;
                 Logger.Warn("bingoAi", "Moving from Chapter " + currentchapterindex + " to " + goalchapterindex);
                 if (currentchapterindex < goalchapterindex) {
@@ -595,8 +664,8 @@ namespace Celeste.Mod.BingoTasPlayer {
                     ret.Add(Right);
                 }
 
-                    // 3. Step: enter
-                    if (chapter.A) {
+                // 3. Step: enter
+                if (chapter.A) {
                     switch (Cp) {
                         case 0:
                             if (goalchapter == 7) ret.Add(entersummit);
@@ -640,6 +709,10 @@ namespace Celeste.Mod.BingoTasPlayer {
                             ret.Add(enterBcp1);
                             break;
                     }
+                } else if (chapter == Chapter.Journal) {
+                    ret.Add(enterJournal);
+                } else {
+                    Logger.Warn("bingoai", "Chapter "+chapter.chapter + " does not exist");
                 }
 
                 // 4. Step: change active route to this one.
