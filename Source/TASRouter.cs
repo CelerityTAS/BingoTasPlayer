@@ -206,6 +206,7 @@ namespace Celeste.Mod.BingoTasPlayer {
             //Add("8A-heartofthemountain-heart-arb");
             //Add(enterChapter(Chapter.E, 0));
             //Add("Epilogue-Birdsnest", "Start", "Reach");
+            //Add(enterChapter(Chapter.Journal));
 
 
             gamestate = new GameState();
@@ -520,6 +521,7 @@ namespace Celeste.Mod.BingoTasPlayer {
                 TASFileInfo rtmwakeup = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Wakeup", "");
                 TASFileInfo rtmCassette = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Cassette", "");
                 TASFileInfo rtmmenu = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Menu", "");
+                TASFileInfo rtmspawn = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "Retry", "");
                 TASFileInfo rtmsummitnocollect = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "SummitNoCollect", "");
                 TASFileInfo rtmsummitcollect = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "RTM.tas", "RTM", "SummitCollect", "");
                 TASFileInfo Left = new TASFileInfo(BingoTasPlayerModule.GMBingoPlayerRepoRelativePath + "Left.tas", "Left", "", "");
@@ -624,7 +626,9 @@ namespace Celeste.Mod.BingoTasPlayer {
                     string[] rtmchapters = { "1B", "2B", "3B", "4B", "5B", "6B", "7B", "8A-heartofthemountain" };
                     string[] leavecheckpoints = { "1A-chasm", "1A-wingedgolden", "2A-awake", "3A-presidentialsuite", "4A-cliffface", "5A-rescue", "resolution", "7A-3000m", "8A-heartofthemountain" };
                     string[] wakeupcheckpoints = { "2A-intervention", "5A-depths" };
+                    string[] spawncheckpoints = { "4A-oldtrail", "5A-start", "9A-powersource" };
                     if (rtmchapters.Any((c) => prev.FilePath.name.Contains(c))) ret.Add(rtmmenu);
+                    if (spawncheckpoints.Any((c) => prev.FilePath.name.Contains(c))) ret.Add(rtmspawn);
                     //else if (prev.FilePath.name.Contains("pico")) { ret.Add(rtm); }
                     else if (prev.FilePath.name == "start") { } else if (prev.FilePath.name.Contains("2A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("1A-fromstart")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("leavepico")) { ret.Add(rtmmenu); } else if (prev.FilePath.name.Contains("6A-fromhollows")) { ret.Add(rtmmenu); } else if (wakeupcheckpoints.Any(v => prev.FilePath.name.Contains(v))) {
                         ret.Add(rtmwakeup);
